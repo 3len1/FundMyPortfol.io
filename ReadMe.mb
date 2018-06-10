@@ -1,0 +1,5 @@
+1)	Go to the Database folder and run the sql scripts
+2)	Run the below command for auto creating the model
+	Scaffold-DbContext "Server=localhost\SQLEXPRESS;Database=Portofolio;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models 
+3)	Then automatic create the CRUD controllers
+	Controller package -> add -> controller -> MVC controllers with views using EntityFramework -> pick your entity
