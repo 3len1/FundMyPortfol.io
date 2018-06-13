@@ -21,7 +21,7 @@ namespace FundMyPortfol.io.Controllers
         // GET: Projects
         public async Task<IActionResult> Index()
         {
-            var portofolioContext = _context.Project.Include(p => p.Creator);
+            var portofolioContext = _context.Project.Include(p => p.ProjectCtratorNavigation);
             return View(await portofolioContext.ToListAsync());
         }
 
@@ -34,7 +34,7 @@ namespace FundMyPortfol.io.Controllers
             }
 
             var project = await _context.Project
-                .Include(p => p.Creator)
+                .Include(p => p.ProjectCtratorNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (project == null)
             {
@@ -47,7 +47,7 @@ namespace FundMyPortfol.io.Controllers
         // GET: Projects/Create
         public IActionResult Create()
         {
-            ViewData["CreatorId"] = new SelectList(_context.ProjectCreator, "Id", "BrandName");
+            ViewData["ProjectCtrator"] = new SelectList(_context.User, "Id", "Email");
             return View();
         }
 
@@ -56,7 +56,7 @@ namespace FundMyPortfol.io.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CreatedDate,Title,Link,ProjectImage,Likes,PablishDate,ExpireDate,MoneyGoal,MoneyReach,Description,CreatorId")] Project project)
+        public async Task<IActionResult> Create([Bind("Id,CreatedDate,Title,ProjectImage,Likes,PablishDate,ExpireDate,MoneyGoal,MoneyReach,Description,ProjectCtrator")] Project project)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace FundMyPortfol.io.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CreatorId"] = new SelectList(_context.ProjectCreator, "Id", "BrandName", project.CreatorId);
+            ViewData["ProjectCtrator"] = new SelectList(_context.User, "Id", "Email", project.ProjectCtrator);
             return View(project);
         }
 
@@ -81,7 +81,7 @@ namespace FundMyPortfol.io.Controllers
             {
                 return NotFound();
             }
-            ViewData["CreatorId"] = new SelectList(_context.ProjectCreator, "Id", "BrandName", project.CreatorId);
+            ViewData["ProjectCtrator"] = new SelectList(_context.User, "Id", "Email", project.ProjectCtrator);
             return View(project);
         }
 
@@ -90,7 +90,7 @@ namespace FundMyPortfol.io.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,CreatedDate,Title,Link,ProjectImage,Likes,PablishDate,ExpireDate,MoneyGoal,MoneyReach,Description,CreatorId")] Project project)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,CreatedDate,Title,ProjectImage,Likes,PablishDate,ExpireDate,MoneyGoal,MoneyReach,Description,ProjectCtrator")] Project project)
         {
             if (id != project.Id)
             {
@@ -117,7 +117,7 @@ namespace FundMyPortfol.io.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CreatorId"] = new SelectList(_context.ProjectCreator, "Id", "BrandName", project.CreatorId);
+            ViewData["ProjectCtrator"] = new SelectList(_context.User, "Id", "Email", project.ProjectCtrator);
             return View(project);
         }
 
@@ -130,7 +130,7 @@ namespace FundMyPortfol.io.Controllers
             }
 
             var project = await _context.Project
-                .Include(p => p.Creator)
+                .Include(p => p.ProjectCtratorNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (project == null)
             {

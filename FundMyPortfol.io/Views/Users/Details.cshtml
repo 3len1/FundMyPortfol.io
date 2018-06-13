@@ -1,4 +1,4 @@
-﻿@model FundMyPortfol.io.Models.ProjectCreator
+﻿@model FundMyPortfol.io.Models.User
 
 @{
     ViewData["Title"] = "Details";
@@ -7,7 +7,7 @@
 <h2>Details</h2>
 
 <div>
-    <h4>ProjectCreator</h4>
+    <h4>User</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -17,22 +17,22 @@
             @Html.DisplayFor(model => model.CreatedDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.BrandName)
+            @Html.DisplayNameFor(model => model.Email)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.BrandName)
+            @Html.DisplayFor(model => model.Email)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Link)
+            @Html.DisplayNameFor(model => model.Password)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Link)
+            @Html.DisplayFor(model => model.Password)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ProfileImage)
+            @Html.DisplayNameFor(model => model.SeasonId)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ProfileImage)
+            @Html.DisplayFor(model => model.SeasonId)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.ProjectCounter)
@@ -47,22 +47,10 @@
             @Html.DisplayFor(model => model.Followers)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.BirthDay)
+            @Html.DisplayNameFor(model => model.UserDetailsNavigation)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.BirthDay)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.About)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.About)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatorDetails)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CreatorDetails.FirstName)
+            @Html.DisplayFor(model => model.UserDetailsNavigation.FirstName)
         </dd>
     </dl>
 </div>

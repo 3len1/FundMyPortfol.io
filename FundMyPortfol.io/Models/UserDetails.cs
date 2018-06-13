@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace FundMyPortfol.io.Models
 {
-    public partial class CreatorDetails
+    public partial class UserDetails
     {
         public long Id { get; set; }
         public DateTime CreatedDate { get; set; }
@@ -14,7 +14,8 @@ namespace FundMyPortfol.io.Models
         public string Street { get; set; }
         public string PostalCode { get; set; }
         public string PhoneNumber { get; set; }
+        public byte[] ProfileImage { get; set; }
 
-        public ProjectCreator ProjectCreator { get; set; }
+        public User User { get; set; }
     }
 }

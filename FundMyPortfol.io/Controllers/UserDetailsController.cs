@@ -9,23 +9,22 @@ using FundMyPortfol.io.Models;
 
 namespace FundMyPortfol.io.Controllers
 {
-    public class ProjectCreatorsController : Controller
+    public class UserDetailsController : Controller
     {
         private readonly PortofolioContext _context;
 
-        public ProjectCreatorsController(PortofolioContext context)
+        public UserDetailsController(PortofolioContext context)
         {
             _context = context;
         }
 
-        // GET: ProjectCreators
+        // GET: UserDetails
         public async Task<IActionResult> Index()
         {
-            var portofolioContext = _context.ProjectCreator.Include(p => p.CreatorDetails);
-            return View(await portofolioContext.ToListAsync());
+            return View(await _context.UserDetails.ToListAsync());
         }
 
-        // GET: ProjectCreators/Details/5
+        // GET: UserDetails/Details/5
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
@@ -33,42 +32,39 @@ namespace FundMyPortfol.io.Controllers
                 return NotFound();
             }
 
-            var projectCreator = await _context.ProjectCreator
-                .Include(p => p.CreatorDetails)
+            var userDetails = await _context.UserDetails
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (projectCreator == null)
+            if (userDetails == null)
             {
                 return NotFound();
             }
 
-            return View(projectCreator);
+            return View(userDetails);
         }
 
-        // GET: ProjectCreators/Create
+        // GET: UserDetails/Create
         public IActionResult Create()
         {
-            ViewData["CreatorDetailsId"] = new SelectList(_context.CreatorDetails, "Id", "FirstName");
             return View();
         }
 
-        // POST: ProjectCreators/Create
+        // POST: UserDetails/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CreatedDate,BrandName,Link,ProfileImage,ProjectCounter,Followers,BirthDay,About,CreatorDetailsId")] ProjectCreator projectCreator)
+        public async Task<IActionResult> Create([Bind("Id,CreatedDate,LastName,FirstName,Country,Town,Street,PostalCode,PhoneNumber,ProfileImage")] UserDetails userDetails)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(projectCreator);
+                _context.Add(userDetails);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CreatorDetailsId"] = new SelectList(_context.CreatorDetails, "Id", "FirstName", projectCreator.CreatorDetailsId);
-            return View(projectCreator);
+            return View(userDetails);
         }
 
-        // GET: ProjectCreators/Edit/5
+        // GET: UserDetails/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -76,23 +72,22 @@ namespace FundMyPortfol.io.Controllers
                 return NotFound();
             }
 
-            var projectCreator = await _context.ProjectCreator.FindAsync(id);
-            if (projectCreator == null)
+            var userDetails = await _context.UserDetails.FindAsync(id);
+            if (userDetails == null)
             {
                 return NotFound();
             }
-            ViewData["CreatorDetailsId"] = new SelectList(_context.CreatorDetails, "Id", "FirstName", projectCreator.CreatorDetailsId);
-            return View(projectCreator);
+            return View(userDetails);
         }
 
-        // POST: ProjectCreators/Edit/5
+        // POST: UserDetails/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,CreatedDate,BrandName,Link,ProfileImage,ProjectCounter,Followers,BirthDay,About,CreatorDetailsId")] ProjectCreator projectCreator)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,CreatedDate,LastName,FirstName,Country,Town,Street,PostalCode,PhoneNumber,ProfileImage")] UserDetails userDetails)
         {
-            if (id != projectCreator.Id)
+            if (id != userDetails.Id)
             {
                 return NotFound();
             }
@@ -101,12 +96,12 @@ namespace FundMyPortfol.io.Controllers
             {
                 try
                 {
-                    _context.Update(projectCreator);
+                    _context.Update(userDetails);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProjectCreatorExists(projectCreator.Id))
+                    if (!UserDetailsExists(userDetails.Id))
                     {
                         return NotFound();
                     }
@@ -117,11 +112,10 @@ namespace FundMyPortfol.io.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CreatorDetailsId"] = new SelectList(_context.CreatorDetails, "Id", "FirstName", projectCreator.CreatorDetailsId);
-            return View(projectCreator);
+            return View(userDetails);
         }
 
-        // GET: ProjectCreators/Delete/5
+        // GET: UserDetails/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -129,31 +123,30 @@ namespace FundMyPortfol.io.Controllers
                 return NotFound();
             }
 
-            var projectCreator = await _context.ProjectCreator
-                .Include(p => p.CreatorDetails)
+            var userDetails = await _context.UserDetails
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (projectCreator == null)
+            if (userDetails == null)
             {
                 return NotFound();
             }
 
-            return View(projectCreator);
+            return View(userDetails);
         }
 
-        // POST: ProjectCreators/Delete/5
+        // POST: UserDetails/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var projectCreator = await _context.ProjectCreator.FindAsync(id);
-            _context.ProjectCreator.Remove(projectCreator);
+            var userDetails = await _context.UserDetails.FindAsync(id);
+            _context.UserDetails.Remove(userDetails);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProjectCreatorExists(long id)
+        private bool UserDetailsExists(long id)
         {
-            return _context.ProjectCreator.Any(e => e.Id == id);
+            return _context.UserDetails.Any(e => e.Id == id);
         }
     }
 }

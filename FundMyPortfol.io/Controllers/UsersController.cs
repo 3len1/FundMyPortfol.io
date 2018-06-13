@@ -9,22 +9,23 @@ using FundMyPortfol.io.Models;
 
 namespace FundMyPortfol.io.Controllers
 {
-    public class CreatorDetailsController : Controller
+    public class UsersController : Controller
     {
         private readonly PortofolioContext _context;
 
-        public CreatorDetailsController(PortofolioContext context)
+        public UsersController(PortofolioContext context)
         {
             _context = context;
         }
 
-        // GET: CreatorDetails
+        // GET: Users
         public async Task<IActionResult> Index()
         {
-            return View(await _context.CreatorDetails.ToListAsync());
+            var portofolioContext = _context.User.Include(u => u.UserDetailsNavigation);
+            return View(await portofolioContext.ToListAsync());
         }
 
-        // GET: CreatorDetails/Details/5
+        // GET: Users/Details/5
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
@@ -32,39 +33,42 @@ namespace FundMyPortfol.io.Controllers
                 return NotFound();
             }
 
-            var creatorDetails = await _context.CreatorDetails
+            var user = await _context.User
+                .Include(u => u.UserDetailsNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (creatorDetails == null)
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(creatorDetails);
+            return View(user);
         }
 
-        // GET: CreatorDetails/Create
+        // GET: Users/Create
         public IActionResult Create()
         {
+            ViewData["UserDetails"] = new SelectList(_context.UserDetails, "Id", "FirstName");
             return View();
         }
 
-        // POST: CreatorDetails/Create
+        // POST: Users/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CreatedDate,LastName,FirstName,Country,Town,Street,PostalCode,PhoneNumber")] CreatorDetails creatorDetails)
+        public async Task<IActionResult> Create([Bind("Id,CreatedDate,Email,Password,SeasonId,ProjectCounter,Followers,UserDetails")] User user)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(creatorDetails);
+                _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(creatorDetails);
+            ViewData["UserDetails"] = new SelectList(_context.UserDetails, "Id", "FirstName", user.UserDetails);
+            return View(user);
         }
 
-        // GET: CreatorDetails/Edit/5
+        // GET: Users/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -72,22 +76,23 @@ namespace FundMyPortfol.io.Controllers
                 return NotFound();
             }
 
-            var creatorDetails = await _context.CreatorDetails.FindAsync(id);
-            if (creatorDetails == null)
+            var user = await _context.User.FindAsync(id);
+            if (user == null)
             {
                 return NotFound();
             }
-            return View(creatorDetails);
+            ViewData["UserDetails"] = new SelectList(_context.UserDetails, "Id", "FirstName", user.UserDetails);
+            return View(user);
         }
 
-        // POST: CreatorDetails/Edit/5
+        // POST: Users/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,CreatedDate,LastName,FirstName,Country,Town,Street,PostalCode,PhoneNumber")] CreatorDetails creatorDetails)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,CreatedDate,Email,Password,SeasonId,ProjectCounter,Followers,UserDetails")] User user)
         {
-            if (id != creatorDetails.Id)
+            if (id != user.Id)
             {
                 return NotFound();
             }
@@ -96,12 +101,12 @@ namespace FundMyPortfol.io.Controllers
             {
                 try
                 {
-                    _context.Update(creatorDetails);
+                    _context.Update(user);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CreatorDetailsExists(creatorDetails.Id))
+                    if (!UserExists(user.Id))
                     {
                         return NotFound();
                     }
@@ -112,10 +117,11 @@ namespace FundMyPortfol.io.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(creatorDetails);
+            ViewData["UserDetails"] = new SelectList(_context.UserDetails, "Id", "FirstName", user.UserDetails);
+            return View(user);
         }
 
-        // GET: CreatorDetails/Delete/5
+        // GET: Users/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -123,30 +129,31 @@ namespace FundMyPortfol.io.Controllers
                 return NotFound();
             }
 
-            var creatorDetails = await _context.CreatorDetails
+            var user = await _context.User
+                .Include(u => u.UserDetailsNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (creatorDetails == null)
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(creatorDetails);
+            return View(user);
         }
 
-        // POST: CreatorDetails/Delete/5
+        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var creatorDetails = await _context.CreatorDetails.FindAsync(id);
-            _context.CreatorDetails.Remove(creatorDetails);
+            var user = await _context.User.FindAsync(id);
+            _context.User.Remove(user);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CreatorDetailsExists(long id)
+        private bool UserExists(long id)
         {
-            return _context.CreatorDetails.Any(e => e.Id == id);
+            return _context.User.Any(e => e.Id == id);
         }
     }
 }

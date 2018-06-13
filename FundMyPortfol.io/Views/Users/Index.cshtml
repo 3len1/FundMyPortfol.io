@@ -1,4 +1,4 @@
-﻿@model IEnumerable<FundMyPortfol.io.Models.BackerDetails>
+﻿@model IEnumerable<FundMyPortfol.io.Models.User>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,25 +16,22 @@
                 @Html.DisplayNameFor(model => model.CreatedDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                @Html.DisplayNameFor(model => model.Password)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Country)
+                @Html.DisplayNameFor(model => model.SeasonId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Town)
+                @Html.DisplayNameFor(model => model.ProjectCounter)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Street)
+                @Html.DisplayNameFor(model => model.Followers)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PostalCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PhoneNumber)
+                @Html.DisplayNameFor(model => model.UserDetailsNavigation)
             </th>
             <th></th>
         </tr>
@@ -46,25 +43,22 @@
                 @Html.DisplayFor(modelItem => item.CreatedDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LastName)
+                @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
+                @Html.DisplayFor(modelItem => item.Password)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Country)
+                @Html.DisplayFor(modelItem => item.SeasonId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Town)
+                @Html.DisplayFor(modelItem => item.ProjectCounter)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Street)
+                @Html.DisplayFor(modelItem => item.Followers)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PostalCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
+                @Html.DisplayFor(modelItem => item.UserDetailsNavigation.FirstName)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

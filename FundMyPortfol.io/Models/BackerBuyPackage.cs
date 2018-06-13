@@ -5,10 +5,10 @@ namespace FundMyPortfol.io.Models
 {
     public partial class BackerBuyPackage
     {
-        public long BackerId { get; set; }
-        public long PackageId { get; set; }
+        public long Backer { get; set; }
+        public long Package { get; set; }
 
-        public Backer Backer { get; set; }
-        public Package Package { get; set; }
+        public User BackerNavigation { get; set; }
+        public Package PackageNavigation { get; set; }
     }
 }

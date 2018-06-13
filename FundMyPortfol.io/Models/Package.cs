@@ -13,12 +13,14 @@ namespace FundMyPortfol.io.Models
         public long Id { get; set; }
         public DateTime CreatedDate { get; set; }
         public string PackageName { get; set; }
-        public decimal MoneyCost { get; set; }
-        public int SoldCounter { get; set; }
+        public decimal PledgeAmount { get; set; }
+        public int TimesSelected { get; set; }
+        public int? PackageLeft { get; set; }
+        public DateTime? DeliveryDate { get; set; }
         public string Description { get; set; }
-        public long ProjectId { get; set; }
+        public long Project { get; set; }
 
-        public Project Project { get; set; }
+        public Project ProjectNavigation { get; set; }
         public ICollection<BackerBuyPackage> BackerBuyPackage { get; set; }
     }
 }

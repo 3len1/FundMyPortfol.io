@@ -19,9 +19,6 @@
                 @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Link)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.ProjectImage)
             </th>
             <th>
@@ -43,7 +40,7 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Creator)
+                @Html.DisplayNameFor(model => model.ProjectCtratorNavigation)
             </th>
             <th></th>
         </tr>
@@ -56,9 +53,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Link)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ProjectImage)
@@ -82,7 +76,7 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Creator.BrandName)
+                @Html.DisplayFor(modelItem => item.ProjectCtratorNavigation.Email)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

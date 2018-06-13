@@ -18,11 +18,6 @@
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Link" class="control-label"></label>
-                <input asp-for="Link" class="form-control" />
-                <span asp-validation-for="Link" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="ProjectImage" class="control-label"></label>
                 <input asp-for="ProjectImage" class="form-control" />
                 <span asp-validation-for="ProjectImage" class="text-danger"></span>
@@ -31,11 +26,6 @@
                 <label asp-for="Likes" class="control-label"></label>
                 <input asp-for="Likes" class="form-control" />
                 <span asp-validation-for="Likes" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PablishDate" class="control-label"></label>
-                <input asp-for="PablishDate" class="form-control" />
-                <span asp-validation-for="PablishDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ExpireDate" class="control-label"></label>
@@ -53,8 +43,8 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CreatorId" class="control-label"></label>
-                <select asp-for="CreatorId" class ="form-control" asp-items="ViewBag.CreatorId"></select>
+                <label asp-for="ProjectCtrator" class="control-label"></label>
+                <select asp-for="ProjectCtrator" class ="form-control" asp-items="ViewBag.ProjectCtrator"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
