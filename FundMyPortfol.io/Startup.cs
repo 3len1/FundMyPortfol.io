@@ -33,10 +33,10 @@ namespace FundMyPortfol.io
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            //var connection = @"Server=localhost\SQLEXPRESS;Database=Portofolio;Trusted_Connection=True;ConnectRetryCount=0";
+            var connection = @"Server=localhost\SQLEXPRESS;Database=Portofolio;Trusted_Connection=True;ConnectRetryCount=0";
 
-            //services.AddDbContext<PortofolioContext>(
-              //  options => options.UseSqlServer(connection));
+            services.AddDbContext<PortofolioContext>(
+               options => options.UseSqlServer(connection));
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

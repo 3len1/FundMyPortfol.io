@@ -1,0 +1,60 @@
+﻿@model FundMyPortfol.io.Models.User
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>User</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SeasonId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SeasonId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProjectCounter)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProjectCounter)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Followers)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Followers)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserDetailsNavigation)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserDetailsNavigation.FirstName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
