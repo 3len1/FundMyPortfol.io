@@ -9,11 +9,11 @@ using FundMyPortfol.io.Models;
 
 namespace FundMyPortfol.io.Controllers
 {
-    public class PackagesOldController : Controller
+    public class PackagesController : Controller
     {
         private readonly PortofolioContext _context;
 
-        public PackagesOldController(PortofolioContext context)
+        public PackagesController(PortofolioContext context)
         {
             _context = context;
         }
