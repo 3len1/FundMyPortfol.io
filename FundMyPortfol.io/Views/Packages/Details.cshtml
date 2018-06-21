@@ -1,0 +1,62 @@
+﻿@model FundMyPortfol.io.Models.Package
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Package</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PackageName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PackageName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PledgeAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PledgeAmount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TimesSelected)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TimesSelected)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PackageLeft)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PackageLeft)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DeliveryDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DeliveryDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProjectNavigation)
+        </dt>
+        <dd>
+            <a href="~/Projects/Details/@Html.DisplayFor(model => model.ProjectNavigation.Id)">
+                @Html.DisplayFor(model => model.ProjectNavigation.Title)
+            </a>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
