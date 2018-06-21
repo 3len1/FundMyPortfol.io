@@ -13,13 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProjectImage)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Likes)
@@ -40,7 +34,7 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProjectCtratorNavigation)
+                @Html.DisplayNameFor(model => model.ProjectCtrator)
             </th>
             <th></th>
         </tr>
@@ -49,13 +43,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProjectImage)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Likes)
@@ -76,7 +64,10 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProjectCtratorNavigation.Email)
+                <a href="~/UserDetails/Details/@Html.DisplayFor(modelItem => item.ProjectCtratorNavigation.Id)">
+                    @Html.DisplayFor(modelItem => item.ProjectCtratorNavigation.Email)
+                </a>
+                
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

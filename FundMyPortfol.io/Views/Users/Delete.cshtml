@@ -12,12 +12,6 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.Email)
         </dt>
         <dd>
@@ -48,10 +42,11 @@
             @Html.DisplayFor(model => model.Followers)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.UserDetailsNavigation)
+            @Html.DisplayNameFor(model => model.UserDetails)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.UserDetailsNavigation.FirstName)
+            @Html.DisplayFor(model => model.UserDetailsNavigation.LastName)
         </dd>
     </dl>
     

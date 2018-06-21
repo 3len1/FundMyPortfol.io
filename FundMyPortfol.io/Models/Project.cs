@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 
 namespace FundMyPortfol.io.Models
@@ -11,6 +12,7 @@ namespace FundMyPortfol.io.Models
         }
 
         public long Id { get; set; }
+        [HiddenInput(DisplayValue = false)]
         public DateTime CreatedDate { get; set; }
         public string Title { get; set; }
         public byte[] ProjectImage { get; set; }
