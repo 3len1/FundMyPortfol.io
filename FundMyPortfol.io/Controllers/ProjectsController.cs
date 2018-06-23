@@ -55,8 +55,6 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // POST: Projects/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ProjectCategory,Title,ProjectImage,Likes,PablishDate,ExpireDate,MoneyGoal,MoneyReach,Description,ProjectCtrator")] Project project)
@@ -74,6 +72,43 @@ namespace FundMyPortfol.io.Controllers
             return View(project);
         }
 
+
+        // POST: Projects/Like/5
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Like(long? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var project = await _context.Project.FindAsync(id);
+            if (project == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                project.Likes++;
+                _context.Update(project);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProjectExists(project.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            ViewData["ProjectCtrator"] = new SelectList(_context.User, "Id", "Email", project.ProjectCtrator);
+            var categories = from Project.Category c in Enum.GetValues(typeof(Project.Category))
+                             select c.ToString();
+            ViewData["CategoryBag"] = new SelectList(categories);
+            return RedirectToAction("Details", project);   
+        }
         // GET: Projects/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
@@ -95,9 +130,6 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // POST: Projects/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, [Bind("Id,ProjectCategory,Title,ProjectImage,Likes,PablishDate,ExpireDate,MoneyGoal,MoneyReach,Description,ProjectCtrator")] Project project)
         {

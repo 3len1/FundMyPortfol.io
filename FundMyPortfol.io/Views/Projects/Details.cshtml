@@ -6,6 +6,11 @@
 
 <h2>@Html.DisplayFor(model => model.Title)</h2>
 
+
+<form asp-action="Like">
+    <input type="hidden" asp-for="Id" />
+    <input type="submit" value="Like" class="btn btn-default" />
+</form>
 <div>
     <h4>Project info</h4>
     <hr />
