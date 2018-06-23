@@ -6,11 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FundMyPortfol.io.Models;
+using FundMyPortfol.io.ViewModels;
+using FundMyPortfol.io.Converter;
 
 namespace FundMyPortfol.io.Controllers
 {
     public class UsersController : Controller
     {
+        private UsersConverter _usersConverter = new UsersConverter();
         private readonly PortofolioContext _context;
 
         public UsersController(PortofolioContext context)
@@ -41,7 +44,8 @@ namespace FundMyPortfol.io.Controllers
                 return NotFound();
             }
 
-            return View(user);
+            UserView userView = _usersConverter.UsertoUserViewConverter(user);
+            return View(userView);
         }
 
         // GET: Users/Create
@@ -52,14 +56,16 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // POST: Users/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CreatedDate,Email,Password,SeasonId,ProjectCounter,Followers,UserDetails")] User user)
+        public async Task<IActionResult> Create([Bind("Email,Password,ProjectCounter,Followers,LastName,FirstName,Country,Town,Street,PostalCode,PhoneNumber,ProfileImage")] UserView userView)
         {
+            User user = _usersConverter.UserViewtoUserConverter(userView);
+            UserDetails userDetails = _usersConverter.UserViewtoUserDetailsConverter(userView);
+
             if (ModelState.IsValid)
             {
+                user.UserDetailsNavigation = userDetails;
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -75,32 +81,38 @@ namespace FundMyPortfol.io.Controllers
             {
                 return NotFound();
             }
-
-            var user = await _context.User.FindAsync(id);
+            var user = await _context.User
+                .Include(u => u.UserDetailsNavigation)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (user == null)
             {
                 return NotFound();
             }
-            ViewData["UserDetails"] = new SelectList(_context.UserDetails, "Id", "FirstName", user.UserDetails);
-            return View(user);
+            UserView userView = _usersConverter.UsertoUserViewConverter(user);
+            return View(userView);
         }
 
         // POST: Users/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,CreatedDate,Email,Password,SeasonId,ProjectCounter,Followers,UserDetails")] User user)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,Email,Password,ProjectCounter,Followers,LastName,FirstName,Country,Town,Street,PostalCode,PhoneNumber,ProfileImage")] UserView userView)
         {
-            if (id != user.Id)
+            if (id != userView.Id)
             {
                 return NotFound();
             }
-
+            
+            var user = await _context.User.FirstOrDefaultAsync(m => m.Id == id);
+            var retriveUser = _usersConverter.UserViewtoUserConverter(userView);
+            user.Email = retriveUser.Email;
+            user.Password = retriveUser.Password;
+            UserDetails userDetails = _usersConverter.UserViewtoUserDetailsConverter(userView);
+            userDetails.Id = user.UserDetails;
             if (ModelState.IsValid)
             {
                 try
                 {
+                    _context.Update(userDetails);
                     _context.Update(user);
                     await _context.SaveChangesAsync();
                 }
@@ -115,10 +127,8 @@ namespace FundMyPortfol.io.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["UserDetails"] = new SelectList(_context.UserDetails, "Id", "FirstName", user.UserDetails);
-            return View(user);
+            return View(userView);
         }
 
         // GET: Users/Delete/5
@@ -146,7 +156,9 @@ namespace FundMyPortfol.io.Controllers
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
             var user = await _context.User.FindAsync(id);
+            var userDetails = await _context.UserDetails.FindAsync(user.UserDetails);
             _context.User.Remove(user);
+            _context.UserDetails.Remove(userDetails);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

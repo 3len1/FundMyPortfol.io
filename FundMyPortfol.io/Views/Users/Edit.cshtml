@@ -1,12 +1,13 @@
-﻿@model FundMyPortfol.io.Models.User
+﻿@model FundMyPortfol.io.ViewModels.UserView
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h2>Edit</h2>
+<h2>Edit Profile</h2>
 
-<h4>User</h4>
+<h4> @Html.DisplayFor(model => model.LastName) @Html.DisplayFor(model => model.FirstName)</h4>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -24,25 +25,50 @@
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SeasonId" class="control-label"></label>
-                <input asp-for="SeasonId" class="form-control" />
-                <span asp-validation-for="SeasonId" class="text-danger"></span>
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProjectCounter" class="control-label"></label>
-                <input asp-for="ProjectCounter" class="form-control" />
-                <span asp-validation-for="ProjectCounter" class="text-danger"></span>
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Followers" class="control-label"></label>
-                <input asp-for="Followers" class="form-control" />
-                <span asp-validation-for="Followers" class="text-danger"></span>
+                <label asp-for="Country" class="control-label"></label>
+                <input asp-for="Country" class="form-control" />
+                <span asp-validation-for="Country" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UserDetails" class="control-label"></label>
-                <select asp-for="UserDetails" class="form-control" asp-items="ViewBag.UserDetails"></select>
-                <span asp-validation-for="UserDetails" class="text-danger"></span>
+                <label asp-for="PostalCode" class="control-label"></label>
+                <input asp-for="PostalCode" class="form-control" />
+                <span asp-validation-for="PostalCode" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Town" class="control-label"></label>
+                <input asp-for="Town" class="form-control" />
+                <span asp-validation-for="Town" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Street" class="control-label"></label>
+                <input asp-for="Street" class="form-control" />
+                <span asp-validation-for="Street" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProfileImage" class="control-label"></label>
+                <input asp-for="ProfileImage" class="form-control" />
+                <span asp-validation-for="ProfileImage" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+        <label asp-for="UserDetails" class="control-label"></label>
+        <select asp-for="UserDetails" class="form-control" asp-items="ViewBag.UserDetails"></select>
+        <span asp-validation-for="UserDetails" class="text-danger"></span>
+        </div>*@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
