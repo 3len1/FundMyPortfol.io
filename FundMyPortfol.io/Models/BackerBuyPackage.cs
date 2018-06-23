@@ -7,6 +7,7 @@ namespace FundMyPortfol.io.Models
     {
         public long Backer { get; set; }
         public long Package { get; set; }
+        public DateTime? DeliveryDate { get; set; }
 
         public User BackerNavigation { get; set; }
         public Package PackageNavigation { get; set; }

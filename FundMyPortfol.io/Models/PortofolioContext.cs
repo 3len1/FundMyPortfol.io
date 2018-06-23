@@ -48,6 +48,8 @@ namespace FundMyPortfol.io.Models
                     .HasForeignKey(d => d.Package)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__BackerBuy__Packa__5070F446");
+
+                entity.Property(e => e.DeliveryDate).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<BackerFollowCreator>(entity =>
@@ -72,8 +74,6 @@ namespace FundMyPortfol.io.Models
                 entity.Property(e => e.CreatedDate)
                     .HasColumnType("date")
                     .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.DeliveryDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Description)
                     .IsRequired()

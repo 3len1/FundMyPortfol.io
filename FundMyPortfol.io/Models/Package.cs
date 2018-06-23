@@ -18,7 +18,6 @@ namespace FundMyPortfol.io.Models
         public decimal PledgeAmount { get; set; }
         public int TimesSelected { get; set; }
         public int? PackageLeft { get; set; }
-        public DateTime? DeliveryDate { get; set; }
         public string Description { get; set; }
         public long Project { get; set; }
 
