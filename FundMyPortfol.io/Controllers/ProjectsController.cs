@@ -48,6 +48,9 @@ namespace FundMyPortfol.io.Controllers
         public IActionResult Create()
         {
             ViewData["ProjectCtrator"] = new SelectList(_context.User, "Id", "Email");
+            var categories = from Project.Category c in Enum.GetValues(typeof(Project.Category))
+                             select c.ToString();
+            ViewData["CategoryBag"] = new SelectList(categories);
             return View();
         }
 
@@ -56,7 +59,7 @@ namespace FundMyPortfol.io.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CreatedDate,Title,ProjectImage,Likes,PablishDate,ExpireDate,MoneyGoal,MoneyReach,Description,ProjectCtrator")] Project project)
+        public async Task<IActionResult> Create([Bind("Id,ProjectCategory,Title,ProjectImage,Likes,PablishDate,ExpireDate,MoneyGoal,MoneyReach,Description,ProjectCtrator")] Project project)
         {
             if (ModelState.IsValid)
             {
@@ -85,6 +88,9 @@ namespace FundMyPortfol.io.Controllers
                 return NotFound();
             }
             ViewData["ProjectCtrator"] = new SelectList(_context.User, "Id", "Email", project.ProjectCtrator);
+            var categories = from Project.Category c in Enum.GetValues(typeof(Project.Category))
+                             select c.ToString();
+            ViewData["CategoryBag"] = new SelectList(categories);
             return View(project);
         }
 
@@ -93,7 +99,7 @@ namespace FundMyPortfol.io.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,CreatedDate,Title,ProjectImage,Likes,PablishDate,ExpireDate,MoneyGoal,MoneyReach,Description,ProjectCtrator")] Project project)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,ProjectCategory,Title,ProjectImage,Likes,PablishDate,ExpireDate,MoneyGoal,MoneyReach,Description,ProjectCtrator")] Project project)
         {
             if (id != project.Id)
             {

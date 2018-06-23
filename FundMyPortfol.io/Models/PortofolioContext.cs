@@ -124,11 +124,17 @@ namespace FundMyPortfol.io.Models
                     .IsRequired()
                     .HasMaxLength(100);
 
+                entity.Property(e => e.CategoryString)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasDefaultValueSql("('innovation')");
+
                 entity.HasOne(d => d.ProjectCtratorNavigation)
                     .WithMany(p => p.Project)
                     .HasForeignKey(d => d.ProjectCtrator)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Project__Project__46E78A0C");
+
             });
 
             modelBuilder.Entity<User>(entity =>

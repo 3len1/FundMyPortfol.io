@@ -16,10 +16,10 @@
                 @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Likes)
+                Category
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PablishDate)
+                @Html.DisplayNameFor(model => model.Likes)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ExpireDate)
@@ -29,9 +29,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.MoneyReach)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ProjectCtrator)
@@ -46,10 +43,10 @@
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Likes)
+                @Html.DisplayFor(modelItem => item.ProjectCategory)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PablishDate)
+                @Html.DisplayFor(modelItem => item.Likes)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ExpireDate)
@@ -61,13 +58,10 @@
                 @Html.DisplayFor(modelItem => item.MoneyReach)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
                 <a href="~/Users/Details/@Html.DisplayFor(modelItem => item.ProjectCtratorNavigation.Id)">
                     @Html.DisplayFor(modelItem => item.ProjectCtratorNavigation.Email)
                 </a>
-                
+
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
