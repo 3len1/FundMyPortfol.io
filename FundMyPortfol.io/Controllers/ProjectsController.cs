@@ -60,6 +60,9 @@ namespace FundMyPortfol.io.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user = await _context.User.FirstOrDefaultAsync(m => m.Id == project.ProjectCtrator);
+                user.ProjectCounter ++;
+                _context.User.Update(user);
                 _context.Add(project);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -146,6 +149,9 @@ namespace FundMyPortfol.io.Controllers
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
             var project = await _context.Project.FindAsync(id);
+            var user = await _context.User.FindAsync(project.ProjectCtrator);
+            user.ProjectCounter--;
+            _context.User.Update(user);
             _context.Project.Remove(project);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

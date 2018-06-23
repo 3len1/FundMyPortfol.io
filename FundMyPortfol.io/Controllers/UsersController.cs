@@ -108,6 +108,7 @@ namespace FundMyPortfol.io.Controllers
             user.Password = retriveUser.Password;
             UserDetails userDetails = _usersConverter.UserViewtoUserDetailsConverter(userView);
             userDetails.Id = user.UserDetails;
+            userDetails.CreatedDate = user.CreatedDate;
             if (ModelState.IsValid)
             {
                 try
