@@ -5,6 +5,7 @@ namespace FundMyPortfol.io.Models
 {
     public partial class BackerBuyPackage
     {
+        public long Id { get; set; }
         public long Backer { get; set; }
         public long Package { get; set; }
         public DateTime? DeliveryDate { get; set; }

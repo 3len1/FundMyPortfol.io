@@ -5,6 +5,7 @@ namespace FundMyPortfol.io.Models
 {
     public partial class BackerFollowCreator
     {
+        public long Id { get; set; }
         public long Backer { get; set; }
         public long ProjectCreator { get; set; }
 

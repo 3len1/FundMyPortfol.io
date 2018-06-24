@@ -4,21 +4,22 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
+<h2>Buy package</h2>
 
 <h4>BackerBuyPackage</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Buy">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Backer" class="control-label"></label>
-                <select asp-for="Backer" class ="form-control" asp-items="ViewBag.Backer"></select>
+                <input asp-for="BackerNavigation.Email" class="form-control" />
             </div>
             <div class="form-group">
                 <label asp-for="Package" class="control-label"></label>
-                <select asp-for="Package" class ="form-control" asp-items="ViewBag.Package"></select>
+                <input asp-for="PackageNavigation.PackageName" class="form-control" />
             </div>
             <div class="form-group">
                 <label asp-for="DeliveryDate" class="control-label"></label>
@@ -26,7 +27,7 @@
                 <span asp-validation-for="DeliveryDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Buy" class="btn btn-default" />
             </div>
         </form>
     </div>

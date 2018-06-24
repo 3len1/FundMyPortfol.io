@@ -54,13 +54,13 @@ create table Portofolio.dbo.Package(
 );
 
 create table Portofolio.dbo.BackerBuyPackage(
+	Id bigint primary key identity(1, 1) not null,
 	Backer bigint foreign key references Portofolio.dbo.[User](Id) not null,
-	Package bigint foreign key references Portofolio.dbo.Package(Id) not null,
-	constraint PK_BackerBuyPackage primary key clustered (Backer,  Package)
+	Package bigint foreign key references Portofolio.dbo.Package(Id) not null
 );
 
 create table Portofolio.dbo.BackerFollowCreator(
+	Id bigint primary key identity(1, 1) not null,
 	Backer bigint foreign key references Portofolio.dbo.[User](Id) not null,
-	ProjectCreator bigint foreign key references Portofolio.dbo.[User](Id) not null,
-	constraint PK_BackerFollowCreator primary key clustered (Backer,  ProjectCreator)
+	ProjectCreator bigint foreign key references Portofolio.dbo.[User](Id) not null
 );

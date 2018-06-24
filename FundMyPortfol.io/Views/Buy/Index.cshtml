@@ -1,0 +1,41 @@
+﻿@model IEnumerable<FundMyPortfol.io.Models.BackerBuyPackage>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Dashboard</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Backer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PackageNavigation.PackageName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PackageNavigation.ProjectNavigation.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveryDate)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.BackerNavigation.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PackageNavigation.PackageName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PackageNavigation.ProjectNavigation.Title)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
