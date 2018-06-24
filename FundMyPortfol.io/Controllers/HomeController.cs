@@ -15,13 +15,6 @@ namespace FundMyPortfol.io.Controllers
             return View();
         }
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "About FundMyPortfol.io.";
-
-            return View();
-        }
-
         public IActionResult Contact()
         {
             ViewData["Message"] = "Find us.";

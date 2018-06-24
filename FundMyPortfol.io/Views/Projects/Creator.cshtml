@@ -1,0 +1,73 @@
+﻿@model IEnumerable<FundMyPortfol.io.Models.Project>
+@{
+    ViewData["Title"] = "Creator";
+}
+
+<h2> Mine projects </h2>
+<h4>Here are the projects that are not expired yet</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                Category
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Likes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExpireDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MoneyGoal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MoneyReach)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProjectCtrator)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProjectCategory)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Likes)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExpireDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MoneyGoal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MoneyReach)
+                </td>
+                <td>
+                    <a href="~/Users/Details/@Html.DisplayFor(modelItem => item.ProjectCtratorNavigation.Id)">
+                        @Html.DisplayFor(modelItem => item.ProjectCtratorNavigation.Email)
+                    </a>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+

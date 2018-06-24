@@ -25,6 +25,39 @@ namespace FundMyPortfol.io.Controllers
             return View(await portofolioContext.ToListAsync());
         }
 
+        // GET: Projects/Funded
+        public async Task<IActionResult> Funded()
+        {
+            var portofolioContext = _context.Project.Include(p => p.ProjectCtratorNavigation).Where(p => p.MoneyReach>0);
+            return View(await portofolioContext.ToListAsync());
+        }
+
+        // GET: Projects/Available
+        public async Task<IActionResult> Available()
+        {
+            var portofolioContext = _context.Project.Include(p => p.ProjectCtratorNavigation).Where(p => p.ExpireDate > DateTime.Now );
+            return View(await portofolioContext.ToListAsync());
+        }
+
+        // GET: Projects/Creator
+        public async Task<IActionResult> Creator()
+        {
+            long uId;
+            long.TryParse(HttpContext.Request.Cookies["userId"]?.ToString(), out uId);
+            if (uId == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+            var user = _context.User.FirstOrDefault(u => u.Id == uId);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+            var portofolioContext = _context.Project.Include(p => p.ProjectCtratorNavigation).Where(p => p.ProjectCtrator == uId);
+            return View(await portofolioContext.ToListAsync());
+        }
+
+
         // GET: Projects/Details/5
         public async Task<IActionResult> Details(long? id)
         {
