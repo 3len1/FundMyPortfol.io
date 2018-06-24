@@ -20,7 +20,12 @@ namespace FundMyPortfol.io.Controllers
         {
             _context = context;
         }
-
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            HttpContext.Response.Cookies.Delete("userId");
+            return RedirectToAction("Login");
+        }
         public async Task<IActionResult> Login()
         {
             return View();
@@ -29,12 +34,12 @@ namespace FundMyPortfol.io.Controllers
         public async Task<IActionResult> Login(string email, string password)
         {
 
-            var user = await _context.User.FirstOrDefaultAsync(u => u.Email==email && u.Password==password);
-            if(user == null)
+            var user = await _context.User.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+            if (user == null)
             {
                 return View();
             }
-            HttpContext.Response.Cookies.Append("useId", user.Id.ToString());
+            HttpContext.Response.Cookies.Append("userId", user.Id.ToString());
             return RedirectToAction("Details", user);
         }
         // GET: Users
@@ -116,7 +121,7 @@ namespace FundMyPortfol.io.Controllers
             {
                 return NotFound();
             }
-            
+
             var user = await _context.User.FirstOrDefaultAsync(m => m.Id == id);
             var retriveUser = _usersConverter.UserViewtoUserConverter(userView);
             user.Email = retriveUser.Email;
@@ -182,6 +187,17 @@ namespace FundMyPortfol.io.Controllers
         private bool UserExists(long id)
         {
             return _context.User.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> LoggedEmail()
+        {
+            long uId;
+            if (long.TryParse(HttpContext.Request.Cookies["userId"]?.ToString(), out uId))
+            {
+                var user = await _context.User.FirstOrDefaultAsync(u => u.Id == uId);
+                ViewData["email"] = user.Email;
+            }
+            return View();
         }
     }
 }
