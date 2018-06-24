@@ -103,10 +103,10 @@ namespace FundMyPortfol.io.Controllers
                     throw;
                 }
             }
-            ViewData["ProjectCtrator"] = new SelectList(_context.User, "Id", "Email", project.ProjectCtrator);
-            var categories = from Project.Category c in Enum.GetValues(typeof(Project.Category))
-                             select c.ToString();
-            ViewData["CategoryBag"] = new SelectList(categories);
+            //ViewData["ProjectCtrator"] = new SelectList(_context.User, "Id", "Email", project.ProjectCtrator);
+            //var categories = from Project.Category c in Enum.GetValues(typeof(Project.Category))
+            //                 select c.ToString();
+            //ViewData["CategoryBag"] = new SelectList(categories);
             return RedirectToAction("Details", project);   
         }
         // GET: Projects/Edit/5
@@ -130,16 +130,25 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // POST: Projects/Edit/5
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,ProjectCategory,Title,ProjectImage,Likes,PablishDate,ExpireDate,MoneyGoal,MoneyReach,Description,ProjectCtrator")] Project project)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,ProjectCategory,Title,ProjectImage,PablishDate,ExpireDate,MoneyGoal,Description")] Project updateProject)
         {
-            if (id != project.Id)
+            if (id != updateProject.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                var project = await _context.Project.FirstOrDefaultAsync(m => m.Id == id);
+                project.Title = updateProject.Title;
+                project.ProjectCategory = updateProject.ProjectCategory;
+                project.ProjectImage = updateProject.ProjectImage;
+                project.PablishDate = updateProject.PablishDate;
+                project.ExpireDate = updateProject.ExpireDate;
+                project.MoneyGoal = updateProject.MoneyGoal;
+                project.Description = updateProject.Description;
                 try
                 {
                     _context.Update(project);
@@ -158,8 +167,8 @@ namespace FundMyPortfol.io.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProjectCtrator"] = new SelectList(_context.User, "Id", "Email", project.ProjectCtrator);
-            return View(project);
+            //ViewData["ProjectCtrator"] = new SelectList(_context.User, "Id", "Email", updateProject.ProjectCtrator);
+            return View(updateProject);
         }
 
         // GET: Projects/Delete/5
