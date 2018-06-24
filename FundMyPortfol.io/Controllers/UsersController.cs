@@ -21,13 +21,28 @@ namespace FundMyPortfol.io.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(string email, string password)
+        {
+
+            var user = await _context.User.FirstOrDefaultAsync(u => u.Email==email && u.Password==password);
+            if(user == null)
+            {
+                return View();
+            }
+            HttpContext.Response.Cookies.Append("useId", user.Id.ToString());
+            return RedirectToAction("Details", user);
+        }
         // GET: Users
         public async Task<IActionResult> Index()
         {
             var portofolioContext = _context.User.Include(u => u.UserDetailsNavigation);
             return View(await portofolioContext.ToListAsync());
         }
-
         // GET: Users/Details/5
         public async Task<IActionResult> Details(long? id)
         {
