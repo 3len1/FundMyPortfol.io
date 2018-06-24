@@ -41,8 +41,12 @@ namespace FundMyPortfol.io.Controllers
                 return NotFound();
             }
 
+            var packages = _context.Package.Where(p => p.Project == id);
+            ViewBag.data = packages.ToList();
+
             return View(project);
         }
+
 
         // GET: Projects/Create
         public IActionResult Create()
