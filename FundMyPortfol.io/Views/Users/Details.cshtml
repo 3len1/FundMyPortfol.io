@@ -78,6 +78,14 @@
             @Html.DisplayFor(model => model.ProfileImage)
         </dd>
     </dl>
+    <ul class="list-group">
+        @foreach (var project in Model.Project)
+        {
+            <li class="list-group-item"><a href="~/Projects/Details/@project.Id"> @project.Title </a> </li>
+        }
+    </ul>
+
+    
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |

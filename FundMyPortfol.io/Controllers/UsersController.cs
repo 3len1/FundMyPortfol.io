@@ -65,6 +65,10 @@ namespace FundMyPortfol.io.Controllers
             }
 
             UserView userView = _usersConverter.UsertoUserViewConverter(user);
+
+            var projects = _context.Project.Where(p => p.ProjectCtrator == id);
+            userView.Project = projects.ToList();
+
             return View(userView);
         }
 
