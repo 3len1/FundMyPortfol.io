@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FundMyPortfol.io", "FundMyPortfol.io\FundMyPortfol.io.csproj", "{412ADB55-422D-4D51-8E24-D5DD100235E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FundMyPortfol.io", "FundMyPortfol.io\FundMyPortfol.io.csproj", "{412ADB55-422D-4D51-8E24-D5DD100235E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
