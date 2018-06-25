@@ -35,7 +35,7 @@ namespace FundMyPortfol.io.Models
         {
             modelBuilder.Entity<BackerBuyPackage>(entity =>
             {
-                entity.HasKey(e => new { e.Backer, e.Package });
+                entity.HasKey(e => e.Id);
 
                 entity.HasOne(d => d.BackerNavigation)
                     .WithMany(p => p.BackerBuyPackage)
@@ -54,7 +54,7 @@ namespace FundMyPortfol.io.Models
 
             modelBuilder.Entity<BackerFollowCreator>(entity =>
             {
-                entity.HasKey(e => new { e.Backer, e.ProjectCreator });
+                entity.HasKey(e => e.Id);
 
                 entity.HasOne(d => d.BackerNavigation)
                     .WithMany(p => p.BackerFollowCreatorBackerNavigation)
