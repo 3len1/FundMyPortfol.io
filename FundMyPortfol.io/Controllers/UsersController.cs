@@ -21,12 +21,12 @@ namespace FundMyPortfol.io.Controllers
             _context = context;
         }
         [HttpGet]
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
             HttpContext.Response.Cookies.Delete("userId");
             return RedirectToAction("Login");
         }
-        public async Task<IActionResult> Login()
+        public IActionResult Login()
         {
             return View();
         }

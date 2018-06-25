@@ -44,7 +44,7 @@ namespace FundMyPortfol.io.Controllers
         {
             long uId;
             long.TryParse(HttpContext.Request.Cookies["userId"]?.ToString(), out uId);
-            if (uId == null)
+            if (uId == 0)
             {
                 return RedirectToAction("Login", "Users");
             }

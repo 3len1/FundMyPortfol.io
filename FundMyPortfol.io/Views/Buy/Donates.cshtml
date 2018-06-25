@@ -1,0 +1,49 @@
+﻿@model IEnumerable<FundMyPortfol.io.Models.BackerBuyPackage>
+@{
+    ViewData["Title"] = "Donates";
+}
+
+<h2>Donates</h2>
+<h4>Here are the package you have buy</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Backer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PackageNavigation.PackageName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PackageNavigation.ProjectNavigation.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveryDate)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BackerNavigation.Email)
+                </td>
+                <td>
+                    <a href="~/Packages/Details/@Html.DisplayFor(modelItem => item.Package)">
+                        @Html.DisplayFor(modelItem => item.PackageNavigation.PackageName)
+                    </a>
+                </td>
+                <td>
+                    <a href="~/Projects/Details/@Html.DisplayFor(modelItem => item.PackageNavigation.Project)">
+                        @Html.DisplayFor(modelItem => item.PackageNavigation.ProjectNavigation.Title)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeliveryDate)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
