@@ -21,7 +21,8 @@ namespace FundMyPortfol.io.Controllers
         // GET: Buy
         public async Task<IActionResult> Index()
         {
-            var portofolioContext = _context.BackerBuyPackage.Include(b => b.BackerNavigation).Include(b => b.PackageNavigation);
+            var portofolioContext = _context.BackerBuyPackage.Include(b => b.BackerNavigation).Include(b => b.PackageNavigation)
+                .Include(b => b.PackageNavigation.ProjectNavigation);
             return View(await portofolioContext.ToListAsync());
         }
 
@@ -30,7 +31,7 @@ namespace FundMyPortfol.io.Controllers
         {
             long uId;
             long.TryParse(HttpContext.Request.Cookies["userId"]?.ToString(), out uId);
-            if (uId == null || Id == null)
+            if (uId == 0 || Id == null)
             {
                 return BadRequest();
             }
@@ -66,6 +67,10 @@ namespace FundMyPortfol.io.Controllers
                 return NotFound();
             }
             package.PackageLeft--;
+            if(package.PackageLeft < 0 || package.ProjectNavigation.ExpireDate < DateTime.Now)
+            {
+                return RedirectToAction(nameof(Index));
+            }
             package.ProjectNavigation.MoneyReach = package.ProjectNavigation.MoneyReach + package.PledgeAmount;
             _context.Package.Update(package);
             backerBuyPackage.Backer = user.Id;
@@ -73,11 +78,10 @@ namespace FundMyPortfol.io.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(backerBuyPackage);
-                _context.SaveChanges();
-                //await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            
+
 
             ViewData["Backer"] = new SelectList(_context.User, "Id", "Email", backerBuyPackage.Backer);
             ViewData["Package"] = new SelectList(_context.Package, "Id", "Description", backerBuyPackage.Package);
