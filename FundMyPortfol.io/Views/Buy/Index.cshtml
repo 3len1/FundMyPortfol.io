@@ -30,10 +30,12 @@
                 @Html.DisplayFor(modelItem => item.BackerNavigation.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PackageNavigation.PackageName)
+                <a href="~/Packages/Details/@Html.DisplayFor(modelItem => item.Package)">
+                    @Html.DisplayFor(modelItem => item.PackageNavigation.PackageName)</a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PackageNavigation.ProjectNavigation.Title)
+                <a href="~/Projects/Details/@Html.DisplayFor(modelItem => item.PackageNavigation.Project)">
+                    @Html.DisplayFor(modelItem => item.PackageNavigation.ProjectNavigation.Title)</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DeliveryDate)

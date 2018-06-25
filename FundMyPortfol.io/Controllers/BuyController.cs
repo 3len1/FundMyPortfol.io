@@ -26,6 +26,20 @@ namespace FundMyPortfol.io.Controllers
             return View(await portofolioContext.ToListAsync());
         }
 
+        // GET: Buy/Donates
+        public async Task<IActionResult> Donates()
+        {
+            long uId;
+            long.TryParse(HttpContext.Request.Cookies["userId"]?.ToString(), out uId);
+            if (uId == 0)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var portofolioContext = _context.BackerBuyPackage.Include(b => b.BackerNavigation).Include(b => b.PackageNavigation)
+                .Include(b => b.PackageNavigation.ProjectNavigation).Where(b=> b.Backer==uId);
+            return View(await portofolioContext.ToListAsync());
+        }
+
         // GET: Buy/BuyForm
         public IActionResult BuyForm(long? Id)
         {
@@ -33,7 +47,7 @@ namespace FundMyPortfol.io.Controllers
             long.TryParse(HttpContext.Request.Cookies["userId"]?.ToString(), out uId);
             if (uId == 0 || Id == null)
             {
-                return BadRequest();
+                return RedirectToAction("Login", "User");
             }
             var user = _context.User.FirstOrDefault(u => u.Id == uId);
             var package = _context.Package.Include(p => p.ProjectNavigation).FirstOrDefault(p => p.Id == Id);
@@ -53,7 +67,7 @@ namespace FundMyPortfol.io.Controllers
             return View(backerBuyPackage);
         }
 
-        // POST: Buy/Create
+        // POST: Buy/Buy
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Buy(long? Id, [Bind("Backer,Package,DeliveryDate")] BackerBuyPackage backerBuyPackage)
