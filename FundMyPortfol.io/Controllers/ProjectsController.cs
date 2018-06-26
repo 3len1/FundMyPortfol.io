@@ -19,10 +19,17 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // GET: Projects
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(Project.Category category)
         {
             var portofolioContext = _context.Project.Include(p => p.ProjectCtratorNavigation);
-            return View(await portofolioContext.ToListAsync());
+            var enumValues = Enum.GetValues(typeof(Project.Category));
+            System.Linq.IQueryable result = null;
+            if (category == 0)
+                result = _context.Project.Include(p => p.ProjectCtratorNavigation);
+            else
+                result = _context.Project.Include(p => p.ProjectCtratorNavigation).Where(p => p.ProjectCategory == category);
+            ViewData["ddProjectCategory"] = category;
+            return View(result);
         }
 
         // GET: Projects/Funded
