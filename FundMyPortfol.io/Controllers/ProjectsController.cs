@@ -19,7 +19,7 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // GET: Projects
-        public async Task<IActionResult> Index(Project.Category category)
+        public IActionResult Index(Project.Category category)
         {
             var portofolioContext = _context.Project.Include(p => p.ProjectCtratorNavigation);
             var enumValues = Enum.GetValues(typeof(Project.Category));

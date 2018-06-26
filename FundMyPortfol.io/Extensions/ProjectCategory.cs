@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FundMyPortfol.io.Enumeration
+namespace FundMyPortfol.io.Extensions
 {
     public class ProjectCategory {
         public enum Category
