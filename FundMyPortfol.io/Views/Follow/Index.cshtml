@@ -1,0 +1,32 @@
+﻿@model IEnumerable<FundMyPortfol.io.Models.BackerFollowCreator>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<h2> Hello, @Html.DisplayFor(model => model.First().BackerNavigation.UserDetailsNavigation.FirstName)</h2>
+<h4> Here are the people you follow.</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Check the people inspire you
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <a href="~/Users/Details/@Html.DisplayFor(modelItem => item.ProjectCreatorNavigation.Id)">
+                    @Html.DisplayFor(modelItem => item.ProjectCreatorNavigation.UserDetailsNavigation.FirstName)
+                    @Html.DisplayFor(modelItem => item.ProjectCreatorNavigation.UserDetailsNavigation.LastName)
+                </a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectCreatorNavigation.Followers)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
