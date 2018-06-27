@@ -1,4 +1,4 @@
-﻿using FundMyPortfol.io.Enumeration;
+﻿using FundMyPortfol.io.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,17 +11,17 @@ namespace FundMyPortfol.io.Models
     {
         public enum Category
         {
-            [Description("innovation")] INNOVATION,
-            [Description("arts")] ARTS,
-            [Description("crafts")] CRAFTS,
-            [Description("comics")] COMICS,
-            [Description("film")] FILM,
-            [Description("food")] FOOD,
-            [Description("gadget")] GADGET,
-            [Description("games")] GAMES,
-            [Description("music")] MUSIC,
-            [Description("publishing")] PUBLISHING,
-            [Description("software")] SOFTWARE
+            [Description("innovation")] INNOVATION = 1,
+            [Description("arts")] ARTS = 2,
+            [Description("crafts")] CRAFTS = 3,
+            [Description("comics")] COMICS = 4,
+            [Description("film")] FILM = 5,
+            [Description("food")] FOOD = 6,
+            [Description("gadget")] GADGET =7,
+            [Description("games")] GAMES = 8,
+            [Description("music")] MUSIC = 9,
+            [Description("publishing")] PUBLISHING = 10,
+            [Description("software")] SOFTWARE = 11
         }
 
         public Project()

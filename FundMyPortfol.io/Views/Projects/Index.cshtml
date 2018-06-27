@@ -9,6 +9,34 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-2 pull-right">
+            Filter By Category:
+            <select id="ddProjectCategory" class="form-control">
+                <option></option>
+                @{
+                    var categories = from Project.Category c in Enum.GetValues(typeof(Project.Category))
+                                     select new { value = c, description = c.ToString() };
+
+                    foreach (var item in categories)
+                    {
+                        if (item.value == (Project.Category)ViewData["ddProjectCategory"])
+                        {
+                            <option selected="selected" value="@item.value">
+                                @item.description
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="@item.value">@item.description</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+    </div>
+</div>
 <table class="table">
     <thead>
         <tr>

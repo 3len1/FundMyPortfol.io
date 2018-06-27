@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FundMyPortfol.io.Enumeration
+namespace FundMyPortfol.io.Extensions
 {
     public static class StringExtensions
     {

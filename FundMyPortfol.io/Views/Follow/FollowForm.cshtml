@@ -1,16 +1,15 @@
-﻿@model FundMyPortfol.io.Models.BackerBuyPackage
-
+﻿@model FundMyPortfol.io.Models.BackerFollowCreator
 @{
-    ViewData["Title"] = "Buy";
+    ViewData["Title"] = "Follow";
 }
 
-<h2>Buy package</h2>
+<h2>Follow</h2>
 
-<h4>BackerBuyPackage</h4>
+<h4>A user can follow another</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Buy">
+        <form asp-action="Follow">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -18,16 +17,11 @@
                 <input asp-for="BackerNavigation.Email" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="Package" class="control-label"></label>
-                <input asp-for="PackageNavigation.PackageName" class="form-control" />
+                <label asp-for="ProjectCreator" class="control-label"></label>
+                <input asp-for="ProjectCreatorNavigation.Email" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="DeliveryDate" class="control-label"></label>
-                <input asp-for="DeliveryDate" class="form-control" />
-                <span asp-validation-for="DeliveryDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Buy" class="btn btn-default" />
+                <input type="submit" value="Follow" class="btn btn-default" />
             </div>
         </form>
     </div>
