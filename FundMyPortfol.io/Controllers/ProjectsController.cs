@@ -103,17 +103,19 @@ namespace FundMyPortfol.io.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ProjectCategory,Title,ProjectImage,Likes,PablishDate,ExpireDate,MoneyGoal,MoneyReach,Description,ProjectCtrator")] Project project)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var user = await _context.User.FirstOrDefaultAsync(m => m.Id == project.ProjectCtrator);
+            user.ProjectCounter++;
+            _context.User.Update(user);
+            _context.Add(project);
+            await _context.SaveChangesAsync();
+            //ViewData["ProjectCtrator"] = new SelectList(_context.User, "Id", "Email", project.ProjectCtrator);
+            return Json(new
             {
-                var user = await _context.User.FirstOrDefaultAsync(m => m.Id == project.ProjectCtrator);
-                user.ProjectCounter ++;
-                _context.User.Update(user);
-                _context.Add(project);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ProjectCtrator"] = new SelectList(_context.User, "Id", "Email", project.ProjectCtrator);
-            return View(project);
+                RedirectUrl = Url.Action("details", "projects", new { id = project.Id })
+            });
         }
 
 
@@ -147,10 +149,6 @@ namespace FundMyPortfol.io.Controllers
                     throw;
                 }
             }
-            //ViewData["ProjectCtrator"] = new SelectList(_context.User, "Id", "Email", project.ProjectCtrator);
-            //var categories = from Project.Category c in Enum.GetValues(typeof(Project.Category))
-            //                 select c.ToString();
-            //ViewData["CategoryBag"] = new SelectList(categories);
             return RedirectToAction("Details", project);   
         }
         // GET: Projects/Edit/5
