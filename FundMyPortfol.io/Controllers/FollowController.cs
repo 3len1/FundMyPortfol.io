@@ -25,11 +25,26 @@ namespace FundMyPortfol.io.Controllers
             long.TryParse(HttpContext.Request.Cookies["userId"]?.ToString(), out uId);
             if (uId == 0)
             {
-                return RedirectToAction("Login", "User");
+                return RedirectToAction("Login", "Users");
             }
             var portofolioContext = _context.BackerFollowCreator.Include(u => u.BackerNavigation).Include(u => u.ProjectCreatorNavigation)
                 .Include(d => d.BackerNavigation.UserDetailsNavigation).Include(d => d.ProjectCreatorNavigation.UserDetailsNavigation)
                 .Where(b => b.Backer == uId);
+            return View(await portofolioContext.ToListAsync());
+        }
+
+        // GET: Follow/Followers
+        public async Task<IActionResult> Followers()
+        {
+            long uId;
+            long.TryParse(HttpContext.Request.Cookies["userId"]?.ToString(), out uId);
+            if (uId == 0)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+            var portofolioContext = _context.BackerFollowCreator.Include(u => u.BackerNavigation).Include(u => u.ProjectCreatorNavigation)
+                .Include(d => d.BackerNavigation.UserDetailsNavigation).Include(d => d.ProjectCreatorNavigation.UserDetailsNavigation)
+                .Where(b => b.ProjectCreator == uId);
             return View(await portofolioContext.ToListAsync());
         }
 
@@ -39,7 +54,7 @@ namespace FundMyPortfol.io.Controllers
             long uId;
             long.TryParse(HttpContext.Request.Cookies["userId"]?.ToString(), out uId);
             if (uId == 0 || Id == null)
-                return RedirectToAction("Login", "User");
+                return RedirectToAction("Login", "Users");
             else if (uId == Id)
                 return Forbid();
             var backer = _context.User.Include(u => u.UserDetailsNavigation).FirstOrDefault(u => u.Id == uId);
@@ -60,7 +75,7 @@ namespace FundMyPortfol.io.Controllers
             long uId;
             long.TryParse(HttpContext.Request.Cookies["userId"]?.ToString(), out uId);
             if (uId == 0 || Id == null)
-                return RedirectToAction("Login", "User");
+                return RedirectToAction("Login", "Users");
             else if (uId == Id)
                 return Forbid();
             var backer = _context.User.Include(u => u.UserDetailsNavigation).FirstOrDefault(u => u.Id == uId);
