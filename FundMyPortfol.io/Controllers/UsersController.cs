@@ -20,16 +20,22 @@ namespace FundMyPortfol.io.Controllers
         {
             _context = context;
         }
+
+        //Get Users/Logout
         [HttpGet]
         public IActionResult Logout()
         {
             HttpContext.Response.Cookies.Delete("userId");
             return RedirectToAction("Login");
         }
+
+        //Get Users/Login
         public IActionResult Login()
         {
             return View();
         }
+
+        //Post Users/Login
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
@@ -42,30 +48,27 @@ namespace FundMyPortfol.io.Controllers
             HttpContext.Response.Cookies.Append("userId", user.Id.ToString());
             return RedirectToAction("Details", user);
         }
+
         // GET: Users
         public async Task<IActionResult> Index()
         {
             var portofolioContext = _context.User.Include(u => u.UserDetailsNavigation);
             return View(await portofolioContext.ToListAsync());
         }
+
         // GET: Users/Details/5
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
-            {
-                return NotFound();
-            }
+                return BadRequest();
 
             var user = await _context.User
                 .Include(u => u.UserDetailsNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (user == null)
-            {
                 return NotFound();
-            }
 
             UserView userView = _usersConverter.UsertoUserViewConverter(user);
-
             var projects = _context.Project.Where(p => p.ProjectCtrator == id);
             userView.Project = projects.ToList();
 
@@ -87,31 +90,28 @@ namespace FundMyPortfol.io.Controllers
             User user = _usersConverter.UserViewtoUserConverter(userView);
             UserDetails userDetails = _usersConverter.UserViewtoUserDetailsConverter(userView);
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return BadRequest();
+            user.UserDetailsNavigation = userDetails;
+            _context.Add(user);
+            await _context.SaveChangesAsync();
+            return Json(new
             {
-                user.UserDetailsNavigation = userDetails;
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["UserDetails"] = new SelectList(_context.UserDetails, "Id", "FirstName", user.UserDetails);
-            return View(user);
+                RedirectUrl = Url.Action("login", "users")
+            });
+
         }
 
         // GET: Users/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
-            {
-                return NotFound();
-            }
+                return BadRequest();
             var user = await _context.User
                 .Include(u => u.UserDetailsNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (user == null)
-            {
                 return NotFound();
-            }
             UserView userView = _usersConverter.UsertoUserViewConverter(user);
             return View(userView);
         }
@@ -122,10 +122,9 @@ namespace FundMyPortfol.io.Controllers
         public async Task<IActionResult> Edit(long id, [Bind("Id,Email,Password,ProjectCounter,Followers,LastName,FirstName,Country,Town,Street,PostalCode,PhoneNumber,ProfileImage")] UserView userView)
         {
             if (id != userView.Id)
-            {
-                return NotFound();
-            }
-
+                return BadRequest();
+            if (!ModelState.IsValid)
+                return BadRequest();
             var user = await _context.User.FirstOrDefaultAsync(m => m.Id == id);
             var retriveUser = _usersConverter.UserViewtoUserConverter(userView);
             user.Email = retriveUser.Email;
@@ -133,45 +132,36 @@ namespace FundMyPortfol.io.Controllers
             UserDetails userDetails = _usersConverter.UserViewtoUserDetailsConverter(userView);
             userDetails.Id = user.UserDetails;
             userDetails.CreatedDate = user.CreatedDate;
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(userDetails);
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserExists(user.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _context.Update(userDetails);
+                _context.Update(user);
+                await _context.SaveChangesAsync();
             }
-            return View(userView);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(user.Id))
+                    return NotFound();
+                else
+                    throw;
+            }
+            return Json(new
+            {
+                RedirectUrl = Url.Action("details", "users", new { id = user.Id })
+            });
         }
 
         // GET: Users/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
-
             var user = await _context.User
                 .Include(u => u.UserDetailsNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (user == null)
-            {
                 return NotFound();
-            }
-
+            
             return View(user);
         }
 

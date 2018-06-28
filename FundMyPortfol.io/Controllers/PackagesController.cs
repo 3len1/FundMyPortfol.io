@@ -29,17 +29,12 @@ namespace FundMyPortfol.io.Controllers
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
-            {
-                return NotFound();
-            }
-
+                return BadRequest();
             var package = await _context.Package
                 .Include(p => p.ProjectNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (package == null)
-            {
                 return NotFound();
-            }
 
             return View(package);
         }
@@ -52,90 +47,73 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // POST: Packages/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CreatedDate,PackageName,PledgeAmount,TimesSelected,PackageLeft,DeliveryDate,Description,Project")] Package package)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return BadRequest();
+            _context.Add(package);
+            await _context.SaveChangesAsync();
+            return Json(new
             {
-                _context.Add(package);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["Project"] = new SelectList(_context.Project, "Id", "Title", package.Project);
-            return View(package);
+                RedirectUrl = Url.Action("details", "packages", new { id = package.Id })
+            });
+            
         }
 
         // GET: Packages/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
-            {
-                return NotFound();
-            }
-
+                return BadRequest();
             var package = await _context.Package.FindAsync(id);
             if (package == null)
-            {
                 return NotFound();
-            }
             ViewData["Project"] = new SelectList(_context.Project, "Id", "Title", package.Project);
             return View(package);
         }
 
         // POST: Packages/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, [Bind("Id,CreatedDate,PackageName,PledgeAmount,TimesSelected,PackageLeft,DeliveryDate,Description,Project")] Package package)
         {
             if (id != package.Id)
-            {
-                return NotFound();
-            }
+                return BadRequest();
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return BadRequest();
+            try
             {
-                try
-                {
-                    _context.Update(package);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PackageExists(package.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(package);
+                await _context.SaveChangesAsync();
             }
-            ViewData["Project"] = new SelectList(_context.Project, "Id", "Title", package.Project);
-            return View(package);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PackageExists(package.Id))
+                    return NotFound();
+                else
+                    throw;
+            }
+            return Json(new
+            {
+                RedirectUrl = Url.Action("details", "packages", new { id = package.Id })
+            });
+
         }
 
         // GET: Packages/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
-            {
-                return NotFound();
-            }
-
+                return BadRequest();
+           
             var package = await _context.Package
                 .Include(p => p.ProjectNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (package == null)
-            {
                 return NotFound();
-            }
 
             return View(package);
         }

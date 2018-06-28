@@ -52,14 +52,10 @@ namespace FundMyPortfol.io.Controllers
             long uId;
             long.TryParse(HttpContext.Request.Cookies["userId"]?.ToString(), out uId);
             if (uId == 0)
-            {
                 return RedirectToAction("Login", "Users");
-            }
             var user = _context.User.FirstOrDefault(u => u.Id == uId);
             if (user == null)
-            {
                 return RedirectToAction("Login", "Users");
-            }
             var portofolioContext = _context.Project.Include(p => p.ProjectCtratorNavigation).Where(p => p.ProjectCtrator == uId);
             return View(await portofolioContext.ToListAsync());
         }
@@ -69,18 +65,12 @@ namespace FundMyPortfol.io.Controllers
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
-            {
-                return NotFound();
-            }
-
+                return BadRequest();
             var project = await _context.Project
                 .Include(p => p.ProjectCtratorNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (project == null)
-            {
                 return NotFound();
-            }
-
             var packages = _context.Package.Where(p => p.Project == id);
             ViewBag.data = packages.ToList();
 
@@ -105,13 +95,11 @@ namespace FundMyPortfol.io.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest();
-
             var user = await _context.User.FirstOrDefaultAsync(m => m.Id == project.ProjectCtrator);
             user.ProjectCounter++;
             _context.User.Update(user);
             _context.Add(project);
             await _context.SaveChangesAsync();
-            //ViewData["ProjectCtrator"] = new SelectList(_context.User, "Id", "Email", project.ProjectCtrator);
             return Json(new
             {
                 RedirectUrl = Url.Action("details", "projects", new { id = project.Id })
@@ -124,14 +112,10 @@ namespace FundMyPortfol.io.Controllers
         public async Task<IActionResult> Like(long? id)
         {
             if (id == null)
-            {
-                return NotFound();
-            }
+                return BadRequest();
             var project = await _context.Project.FindAsync(id);
             if (project == null)
-            {
                 return NotFound();
-            }
             try
             {
                 project.Likes++;
@@ -141,29 +125,22 @@ namespace FundMyPortfol.io.Controllers
             catch (DbUpdateConcurrencyException)
             {
                 if (!ProjectExists(project.Id))
-                {
                     return NotFound();
-                }
                 else
-                {
                     throw;
-                }
             }
             return RedirectToAction("Details", project);   
         }
+
         // GET: Projects/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
-            {
-                return NotFound();
-            }
+                return BadRequest();
 
             var project = await _context.Project.FindAsync(id);
             if (project == null)
-            {
                 return NotFound();
-            }
             ViewData["ProjectCtrator"] = new SelectList(_context.User, "Id", "Email", project.ProjectCtrator);
             var categories = from Project.Category c in Enum.GetValues(typeof(Project.Category))
                              select c.ToString();
@@ -177,57 +154,48 @@ namespace FundMyPortfol.io.Controllers
         public async Task<IActionResult> Edit(long id, [Bind("Id,ProjectCategory,Title,ProjectImage,PablishDate,ExpireDate,MoneyGoal,Description")] Project updateProject)
         {
             if (id != updateProject.Id)
-            {
-                return NotFound();
-            }
+                return BadRequest();
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return BadRequest();
+            var project = await _context.Project.FirstOrDefaultAsync(m => m.Id == id);
+            project.Title = updateProject.Title;
+            project.ProjectCategory = updateProject.ProjectCategory;
+            project.ProjectImage = updateProject.ProjectImage;
+            project.PablishDate = updateProject.PablishDate;
+            project.ExpireDate = updateProject.ExpireDate;
+            project.MoneyGoal = updateProject.MoneyGoal;
+            project.Description = updateProject.Description;
+            try
             {
-                var project = await _context.Project.FirstOrDefaultAsync(m => m.Id == id);
-                project.Title = updateProject.Title;
-                project.ProjectCategory = updateProject.ProjectCategory;
-                project.ProjectImage = updateProject.ProjectImage;
-                project.PablishDate = updateProject.PablishDate;
-                project.ExpireDate = updateProject.ExpireDate;
-                project.MoneyGoal = updateProject.MoneyGoal;
-                project.Description = updateProject.Description;
-                try
-                {
-                    _context.Update(project);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProjectExists(project.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(project);
+                await _context.SaveChangesAsync();
             }
-            //ViewData["ProjectCtrator"] = new SelectList(_context.User, "Id", "Email", updateProject.ProjectCtrator);
-            return View(updateProject);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProjectExists(project.Id))
+                    return NotFound();
+                else
+                    throw;
+            }
+            return Json(new
+            {
+                RedirectUrl = Url.Action("details", "projects", new { id = project.Id })
+            });
+
         }
 
         // GET: Projects/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
-            {
-                return NotFound();
-            }
+                return BadRequest();
 
             var project = await _context.Project
                 .Include(p => p.ProjectCtratorNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (project == null)
-            {
                 return NotFound();
-            }
 
             return View(project);
         }

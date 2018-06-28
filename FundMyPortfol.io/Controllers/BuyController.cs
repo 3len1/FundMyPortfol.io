@@ -32,9 +32,7 @@ namespace FundMyPortfol.io.Controllers
             long uId;
             long.TryParse(HttpContext.Request.Cookies["userId"]?.ToString(), out uId);
             if (uId == 0)
-            {
                 return RedirectToAction("Login", "User");
-            }
             var portofolioContext = _context.BackerBuyPackage.Include(b => b.BackerNavigation).Include(b => b.PackageNavigation)
                 .Include(b => b.PackageNavigation.ProjectNavigation).Where(b=> b.Backer==uId);
             return View(await portofolioContext.ToListAsync());
@@ -46,21 +44,13 @@ namespace FundMyPortfol.io.Controllers
             long uId;
             long.TryParse(HttpContext.Request.Cookies["userId"]?.ToString(), out uId);
             if (uId == 0 || Id == null)
-            {
                 return RedirectToAction("Login", "User");
-            }
             var user = _context.User.FirstOrDefault(u => u.Id == uId);
             var package = _context.Package.Include(p => p.ProjectNavigation).FirstOrDefault(p => p.Id == Id);
             if (user == null || package == null)
-            {
                 return NotFound();
-            }
-            //package.PackageLeft--;
             if(user.Id == package.ProjectNavigation.ProjectCtrator)
-            {
                 return Forbid();
-            }
-            //_context.Package.Update(package);
             var backerBuyPackage = new BackerBuyPackage();
             backerBuyPackage.BackerNavigation = user;
             backerBuyPackage.PackageNavigation = package;
@@ -74,32 +64,27 @@ namespace FundMyPortfol.io.Controllers
         {
             long uId;
             long.TryParse(HttpContext.Request.Cookies["userId"]?.ToString(), out uId);
+            if(uId == 0)
+                return RedirectToAction("Login", "User");
             var user = _context.User.FirstOrDefault(u => u.Id == uId);
             var package = _context.Package.Include(p => p.ProjectNavigation).FirstOrDefault(p => p.Id == Id);
             if (user == null || package == null)
-            {
-                return NotFound();
-            }
+                return RedirectToAction("Login", "User");
             package.PackageLeft--;
             if(package.PackageLeft < 0 || package.ProjectNavigation.ExpireDate < DateTime.Now)
-            {
                 return RedirectToAction(nameof(Index));
-            }
             package.ProjectNavigation.MoneyReach = package.ProjectNavigation.MoneyReach + package.PledgeAmount;
             _context.Package.Update(package);
             backerBuyPackage.Backer = user.Id;
             backerBuyPackage.Package = package.Id;
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return BadRequest();
+            _context.Add(backerBuyPackage);
+            await _context.SaveChangesAsync();
+            return Json(new
             {
-                _context.Add(backerBuyPackage);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-
-
-            ViewData["Backer"] = new SelectList(_context.User, "Id", "Email", backerBuyPackage.Backer);
-            ViewData["Package"] = new SelectList(_context.Package, "Id", "Description", backerBuyPackage.Package);
-            return View(backerBuyPackage);
+                RedirectUrl = Url.Action("donates", "buy")
+            });
         }
 
         private bool BackerBuyPackageExists(long id)
