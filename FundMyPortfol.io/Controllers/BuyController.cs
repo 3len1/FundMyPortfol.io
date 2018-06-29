@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FundMyPortfol.io.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FundMyPortfol.io.Controllers
 {
+    [Authorize]
     public class BuyController : Controller
     {
         private readonly PortofolioContext _context;

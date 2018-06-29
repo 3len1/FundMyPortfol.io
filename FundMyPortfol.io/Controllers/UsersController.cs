@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using FundMyPortfol.io.Models;
 using FundMyPortfol.io.ViewModels;
 using FundMyPortfol.io.Converter;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FundMyPortfol.io.Controllers
 {
+    [Authorize]
     public class UsersController : Controller
     {
         private UsersConverter _usersConverter = new UsersConverter();

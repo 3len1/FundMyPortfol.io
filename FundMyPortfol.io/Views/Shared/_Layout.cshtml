@@ -35,12 +35,8 @@
                     <li><a asp-area="" asp-controller="Users" asp-action="">Users</a></li>
                     <li><a asp-area="" asp-controller="Projects" asp-action="">Projects</a></li>
                     <li><a asp-area="" asp-controller="Packages" asp-action="">Funding packages</a></li>
-                    <li><a asp-area="" asp-controller="Users" asp-action="Login">Login</a></li>
-                    <li><a asp-area="" asp-controller="Users" asp-action="Logout">Logout</a></li>
-                    @{
-                        Html.RenderPartial("~/Views/Users/LoggedEmail.cshtml");
-                    }
                 </ul>
+                <partial name="_LoginPartial" />
             </div>
 
         </div>
