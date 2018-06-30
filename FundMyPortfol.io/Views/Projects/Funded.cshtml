@@ -27,7 +27,7 @@
                 @Html.DisplayNameFor(model => model.MoneyReach)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProjectCtrator)
+                Project Creator
             </th>
             <th></th>
         </tr>
@@ -55,7 +55,8 @@
             </td>
             <td>
                 <a href="~/Users/Details/@Html.DisplayFor(modelItem => item.ProjectCtratorNavigation.Id)">
-                    @Html.DisplayFor(modelItem => item.ProjectCtratorNavigation.Email)
+                    @Html.DisplayFor(modelItem => item.ProjectCtratorNavigation.UserDetailsNavigation.FirstName)
+                    @Html.DisplayFor(modelItem => item.ProjectCtratorNavigation.UserDetailsNavigation.LastName)
                 </a>
 			</td>
             <td>

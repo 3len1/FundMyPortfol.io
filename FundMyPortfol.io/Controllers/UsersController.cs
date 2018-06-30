@@ -181,18 +181,7 @@ namespace FundMyPortfol.io.Controllers
             return _context.User.Any(e => e.Id == id);
         }
 
-        public async Task<IActionResult> LoggedEmail()
-        {
-            long uId;
-            if (long.TryParse(HttpContext.Request.Cookies["userId"]?.ToString(), out uId))
-            {
-                var user = await _context.User.FirstOrDefaultAsync(u => u.Id == uId);
-                ViewData["email"] = user.Email;
-            }
-            return View();
-        }
-
-        public long LoggedUser()
+        private long LoggedUser()
         {
             string logeduser = User.FindFirstValue(ClaimTypes.NameIdentifier);
             long.TryParse(logeduser.ToString(), out long uId);

@@ -22,45 +22,32 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // GET: Follow
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            long uId;
-            long.TryParse(HttpContext.Request.Cookies["userId"]?.ToString(), out uId);
-            if (uId == 0)
-            {
-                return RedirectToAction("Login", "Users");
-            }
             var portofolioContext = _context.BackerFollowCreator.Include(u => u.BackerNavigation).Include(u => u.ProjectCreatorNavigation)
                 .Include(d => d.BackerNavigation.UserDetailsNavigation).Include(d => d.ProjectCreatorNavigation.UserDetailsNavigation)
-                .Where(b => b.Backer == uId);
+                .Where(b => b.Backer == LoggedUser());
             return View(await portofolioContext.ToListAsync());
         }
 
         // GET: Follow/Followers
+        [Authorize]
         public async Task<IActionResult> Followers()
         {
-            long uId;
-            long.TryParse(HttpContext.Request.Cookies["userId"]?.ToString(), out uId);
-            if (uId == 0)
-            {
-                return RedirectToAction("Login", "Users");
-            }
             var portofolioContext = _context.BackerFollowCreator.Include(u => u.BackerNavigation).Include(u => u.ProjectCreatorNavigation)
                 .Include(d => d.BackerNavigation.UserDetailsNavigation).Include(d => d.ProjectCreatorNavigation.UserDetailsNavigation)
-                .Where(b => b.ProjectCreator == uId);
+                .Where(b => b.ProjectCreator == LoggedUser());
             return View(await portofolioContext.ToListAsync());
         }
 
         // GET: Follow/FollowForm
+        [Authorize]
         public IActionResult FollowForm(long? Id)
         {
-            long uId;
-            long.TryParse(HttpContext.Request.Cookies["userId"]?.ToString(), out uId);
-            if (uId == 0 || Id == null)
-                return RedirectToAction("Login", "Users");
-            else if (uId == Id)
+            if (LoggedUser() == Id)
                 return Forbid();
-            var backer = _context.User.Include(u => u.UserDetailsNavigation).FirstOrDefault(u => u.Id == uId);
+            var backer = _context.User.Include(u => u.UserDetailsNavigation).FirstOrDefault(u => u.Id == LoggedUser());
             var creator = _context.User.Include(u => u.UserDetailsNavigation).FirstOrDefault(u => u.Id == Id);
             if (backer == null || creator == null)
                 return NotFound();
@@ -72,16 +59,15 @@ namespace FundMyPortfol.io.Controllers
 
         // POST: Follow/Follow
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Follow(long? Id/*, [Bind("Id,Backer,ProjectCreator")] BackerFollowCreator backerFollowCreator*/)
         {
-            long uId;
-            long.TryParse(HttpContext.Request.Cookies["userId"]?.ToString(), out uId);
-            if (uId == 0 || Id == null)
-                return RedirectToAction("Login", "Users");
-            else if (uId == Id)
+            if (Id== null)
                 return Forbid();
-            var backer = _context.User.Include(u => u.UserDetailsNavigation).FirstOrDefault(u => u.Id == uId);
+            else if (LoggedUser() == Id)
+                return Forbid();
+            var backer = _context.User.Include(u => u.UserDetailsNavigation).FirstOrDefault(u => u.Id == LoggedUser());
             var creator = _context.User.Include(u => u.UserDetailsNavigation).FirstOrDefault(u => u.Id == Id);
             if (backer == null || creator == null)
                 return NotFound();

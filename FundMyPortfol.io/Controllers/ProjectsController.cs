@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
-using Microsoft.Net.Http.Headers;
 
 namespace FundMyPortfol.io.Controllers
 {
@@ -28,14 +27,15 @@ namespace FundMyPortfol.io.Controllers
         // GET: Projects
         public IActionResult Index(Project.Category category)
         {
-            //var portofolioContext = _context.Project.Include(p => p.ProjectCtratorNavigation).Include(p=>p.ProjectCtratorNavigation.UserDetailsNavigation);
             var enumValues = Enum.GetValues(typeof(Project.Category));
             System.Linq.IQueryable result = null;
             if (category == 0)
-                result = _context.Project.Include(p => p.ProjectCtratorNavigation).Include(p => p.ProjectCtratorNavigation.UserDetailsNavigation);
+                result = _context.Project.Include(p => p.ProjectCtratorNavigation)
+                    .Include(p => p.ProjectCtratorNavigation.UserDetailsNavigation).OrderBy(p => p.ProjectCtrator);
             else
                 result = _context.Project.Include(p => p.ProjectCtratorNavigation).
-                    Include(p => p.ProjectCtratorNavigation.UserDetailsNavigation).Where(p => p.ProjectCategory == category);
+                    Include(p => p.ProjectCtratorNavigation.UserDetailsNavigation).
+                    Where(p => p.ProjectCategory == category).OrderBy(p=> p.ProjectCtrator);
             ViewData["ddProjectCategory"] = category;
             return View(result);
         }
@@ -43,14 +43,17 @@ namespace FundMyPortfol.io.Controllers
         // GET: Projects/Funded
         public async Task<IActionResult> Funded()
         {
-            var portofolioContext = _context.Project.Include(p => p.ProjectCtratorNavigation).Where(p => p.MoneyReach>0);
+            var portofolioContext = _context.Project.Include(p => p.ProjectCtratorNavigation)
+                                    .Include(p=> p.ProjectCtratorNavigation.UserDetailsNavigation).Where(p => p.MoneyReach>0);
             return View(await portofolioContext.ToListAsync());
         }
 
         // GET: Projects/Available
         public async Task<IActionResult> Available()
         {
-            var portofolioContext = _context.Project.Include(p => p.ProjectCtratorNavigation).Where(p => p.ExpireDate > DateTime.Now );
+            var portofolioContext = _context.Project.Include(p => p.ProjectCtratorNavigation)
+                                    .Include(p => p.ProjectCtratorNavigation.UserDetailsNavigation)
+                                    .Where(p => p.ExpireDate > DateTime.Now );
             return View(await portofolioContext.ToListAsync());
         }
 
@@ -58,14 +61,9 @@ namespace FundMyPortfol.io.Controllers
         [Authorize]
         public async Task<IActionResult> Creator()
         {
-            long uId;
-            long.TryParse(HttpContext.Request.Cookies["userId"]?.ToString(), out uId);
-            if (uId == 0)
-                return RedirectToAction("Login", "Users");
-            var user = _context.User.FirstOrDefault(u => u.Id == uId);
-            if (user == null)
-                return RedirectToAction("Login", "Users");
-            var portofolioContext = _context.Project.Include(p => p.ProjectCtratorNavigation).Where(p => p.ProjectCtrator == uId);
+            var portofolioContext = _context.Project.Include(p => p.ProjectCtratorNavigation)
+                                    .Include(p => p.ProjectCtratorNavigation.UserDetailsNavigation)
+                                    .Where(p => p.ProjectCtrator == LoggedUser());
             return View(await portofolioContext.ToListAsync());
         }
 
@@ -266,7 +264,7 @@ namespace FundMyPortfol.io.Controllers
             }
         }
 
-        public long LoggedUser()
+        private long LoggedUser()
         {
             string logeduser = User.FindFirstValue(ClaimTypes.NameIdentifier);
             long.TryParse(logeduser.ToString(), out long uId);

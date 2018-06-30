@@ -24,7 +24,7 @@ namespace FundMyPortfol.io.Controllers
         // GET: Packages
         public async Task<IActionResult> Index()
         {
-            var portofolioContext = _context.Package.Include(p => p.ProjectNavigation);
+            var portofolioContext = _context.Package.Include(p => p.ProjectNavigation).OrderBy(p => p.ProjectNavigation.Title);
             return View(await portofolioContext.ToListAsync());
         }
 
@@ -43,15 +43,17 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // GET: Packages/Create
+        [Authorize]
         public IActionResult Create()
         {
-            ViewData["Project"] = new SelectList(_context.Project, "Id", "Title");
+            ViewData["Project"] = new SelectList(_context.Project.Where(p=> p.ProjectCtrator == LoggedUser()), "Id", "Title");
             return View();
         }
 
         // POST: Packages/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,CreatedDate,PackageName,PledgeAmount,TimesSelected,PackageLeft,DeliveryDate,Description,Project")] Package package)
         {
             if (!ModelState.IsValid)
@@ -66,6 +68,7 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // GET: Packages/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -73,12 +76,13 @@ namespace FundMyPortfol.io.Controllers
             var package = await _context.Package.FindAsync(id);
             if (package == null)
                 return NotFound();
-            ViewData["Project"] = new SelectList(_context.Project, "Id", "Title", package.Project);
+            ViewData["Project"] = new SelectList(_context.Project.Where(p => p.ProjectCtrator == LoggedUser()), "Id", "Title");
             return View(package);
         }
 
         // POST: Packages/Edit/5
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, [Bind("Id,CreatedDate,PackageName,PledgeAmount,TimesSelected,PackageLeft,DeliveryDate,Description,Project")] Package package)
         {
@@ -107,6 +111,7 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // GET: Packages/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -122,6 +127,7 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // POST: Packages/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
@@ -137,7 +143,7 @@ namespace FundMyPortfol.io.Controllers
             return _context.Package.Any(e => e.Id == id);
         }
 
-        public long LoggedUser()
+        private long LoggedUser()
         {
             string logeduser = User.FindFirstValue(ClaimTypes.NameIdentifier);
             long.TryParse(logeduser.ToString(), out long uId);
