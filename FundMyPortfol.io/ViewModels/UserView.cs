@@ -1,4 +1,5 @@
 ﻿using FundMyPortfol.io.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,8 @@ namespace FundMyPortfol.io.ViewModels
         public string Street { get; set; }
         public string PostalCode { get; set; }
         public string PhoneNumber { get; set; }
-        public byte[] ProfileImage { get; set; }
+        public string ProfileImage { get; set; }
         public ICollection<Project> Project { get; set; }
+        public IFormFile Media { get; set; }
     }
 }

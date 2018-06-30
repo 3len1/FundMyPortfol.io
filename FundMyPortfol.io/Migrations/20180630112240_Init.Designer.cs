@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FundMyPortfol.io.Migrations
 {
     [DbContext(typeof(PortofolioContext))]
-    [Migration("20180630102822_Init")]
+    [Migration("20180630112240_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -140,8 +140,8 @@ namespace FundMyPortfol.io.Migrations
 
                     b.Property<long>("ProjectCtrator");
 
-                    b.Property<byte[]>("ProjectImage")
-                        .HasColumnType("image");
+                    b.Property<string>("ProjectImage")
+                        .HasColumnType("ntext");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -246,8 +246,8 @@ namespace FundMyPortfol.io.Migrations
                         .HasMaxLength(5)
                         .IsUnicode(false);
 
-                    b.Property<byte[]>("ProfileImage")
-                        .HasColumnType("image");
+                    b.Property<string>("ProfileImage")
+                        .HasColumnType("ntext");
 
                     b.Property<string>("Street")
                         .HasMaxLength(100);

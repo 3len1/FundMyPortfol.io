@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FundMyPortfol.io.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace FundMyPortfol.io.Controllers
 {
@@ -93,5 +94,13 @@ namespace FundMyPortfol.io.Controllers
         {
             return _context.BackerBuyPackage.Any(e => e.Backer == id);
         }
+
+        public long LoggedUser()
+        {
+            string logeduser = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            long.TryParse(logeduser.ToString(), out long uId);
+            return uId;
+        }
+
     }
 }

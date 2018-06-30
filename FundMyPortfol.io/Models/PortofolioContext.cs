@@ -112,7 +112,7 @@ namespace FundMyPortfol.io.Models
                     .HasColumnType("date")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.ProjectImage).HasColumnType("image");
+                entity.Property(e => e.ProjectImage).HasColumnType("ntext");
 
                 entity.Property(e => e.Title)
                     .IsRequired()
@@ -136,11 +136,6 @@ namespace FundMyPortfol.io.Models
                 entity.HasIndex(e => e.UserDetails)
                     .HasName("UQ__User__096601D9463255F4")
                     .IsUnique();
-
-                //entity.Property(e => e.CreatedDate)
-                //    .HasColumnType("date")
-                //    .HasDefaultValueSql("(getdate())");
-
                 
                 entity.HasOne(d => d.UserDetailsNavigation)
                     .WithOne(p => p.User)
@@ -173,7 +168,7 @@ namespace FundMyPortfol.io.Models
                     .HasMaxLength(5)
                     .IsUnicode(false);
 
-                entity.Property(e => e.ProfileImage).HasColumnType("image");
+                entity.Property(e => e.ProfileImage).HasColumnType("ntext");
 
                 entity.Property(e => e.Street).HasMaxLength(100);
 

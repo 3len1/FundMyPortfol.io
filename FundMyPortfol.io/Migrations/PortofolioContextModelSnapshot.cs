@@ -138,8 +138,8 @@ namespace FundMyPortfol.io.Migrations
 
                     b.Property<long>("ProjectCtrator");
 
-                    b.Property<byte[]>("ProjectImage")
-                        .HasColumnType("image");
+                    b.Property<string>("ProjectImage")
+                        .HasColumnType("ntext");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -244,8 +244,8 @@ namespace FundMyPortfol.io.Migrations
                         .HasMaxLength(5)
                         .IsUnicode(false);
 
-                    b.Property<byte[]>("ProfileImage")
-                        .HasColumnType("image");
+                    b.Property<string>("ProfileImage")
+                        .HasColumnType("ntext");
 
                     b.Property<string>("Street")
                         .HasMaxLength(100);

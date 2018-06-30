@@ -33,7 +33,7 @@ namespace FundMyPortfol.io.Models
         [HiddenInput(DisplayValue = false)]
         public DateTime CreatedDate { get; set; }
         public string Title { get; set; }
-        public byte[] ProjectImage { get; set; }
+        public string ProjectImage { get; set; }
         public int Likes { get; set; }
         public DateTime PablishDate { get; set; }
         public DateTime ExpireDate { get; set; }

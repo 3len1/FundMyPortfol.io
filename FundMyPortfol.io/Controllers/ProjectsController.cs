@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +6,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FundMyPortfol.io.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using Microsoft.Net.Http.Headers;
 
 namespace FundMyPortfol.io.Controllers
 {
@@ -14,6 +18,7 @@ namespace FundMyPortfol.io.Controllers
     public class ProjectsController : Controller
     {
         private readonly PortofolioContext _context;
+        private readonly IHostingEnvironment _environment;
 
         public ProjectsController(PortofolioContext context)
         {
@@ -49,6 +54,7 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // GET: Projects/Creator
+        [Authorize]
         public async Task<IActionResult> Creator()
         {
             long uId;
@@ -81,9 +87,9 @@ namespace FundMyPortfol.io.Controllers
 
 
         // GET: Projects/Create
+        [Authorize]
         public IActionResult Create()
         {
-            ViewData["ProjectCtrator"] = new SelectList(_context.User, "Id", "Email");
             var categories = from Project.Category c in Enum.GetValues(typeof(Project.Category))
                              select c.ToString();
             ViewData["CategoryBag"] = new SelectList(categories);
@@ -93,12 +99,17 @@ namespace FundMyPortfol.io.Controllers
         // POST: Projects/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ProjectCategory,Title,ProjectImage,Likes,PablishDate,ExpireDate,MoneyGoal,MoneyReach,Description,ProjectCtrator")] Project project)
+        [Authorize]
+        public async Task<IActionResult> Create([Bind("Id,ProjectCategory,Title,Likes,PablishDate,ExpireDate,MoneyGoal,MoneyReach,Description,ProjectCtrator")] Project project)
         {
+            var httpFiles = HttpContext.Request.Form.Files;
+            AddMediaFiles(project, LoggedUser().ToString(), httpFiles);
+
             if (!ModelState.IsValid)
                 return BadRequest();
-            var user = await _context.User.FirstOrDefaultAsync(m => m.Id == project.ProjectCtrator);
-            _context.User.Update(user);
+
+            var user = await _context.User.FirstOrDefaultAsync(m => m.Id == LoggedUser());
+
             _context.Add(project);
             await _context.SaveChangesAsync();
             return Json(new
@@ -110,6 +121,7 @@ namespace FundMyPortfol.io.Controllers
 
         // POST: Projects/Like/5
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Like(long? id)
         {
             if (id == null)
@@ -134,6 +146,7 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // GET: Projects/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -152,6 +165,7 @@ namespace FundMyPortfol.io.Controllers
         // POST: Projects/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(long id, [Bind("Id,ProjectCategory,Title,ProjectImage,PablishDate,ExpireDate,MoneyGoal,Description")] Project updateProject)
         {
             if (id != updateProject.Id)
@@ -187,6 +201,7 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // GET: Projects/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -204,6 +219,7 @@ namespace FundMyPortfol.io.Controllers
         // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
             var project = await _context.Project.FindAsync(id);
@@ -217,6 +233,42 @@ namespace FundMyPortfol.io.Controllers
         private bool ProjectExists(long id)
         {
             return _context.Project.Any(e => e.Id == id);
+        }
+
+
+        private void AddMediaFiles(Project project, string userId, IFormFileCollection httpFiles)
+        {
+            if (httpFiles.Count() > 0)
+            {
+                string pathToDir = string.Empty;
+                var photoName = "";
+                var mediaFile = httpFiles;
+
+                var folder = Path.Combine(_environment.WebRootPath, "media");
+                var createdDirectory = Directory.CreateDirectory(folder + "\\" + userId + "\\" + $"{project.Title.ToLower()}");
+                project.ProjectImage = createdDirectory.ToString();
+                foreach (var photo in mediaFile)
+                {
+                    if (photo.Length > 0)
+                    {
+                        photoName = httpFiles[0].GetFilename();
+                        pathToDir = createdDirectory + "\\" + photoName;
+                    }
+                    using (FileStream fs = new FileStream(pathToDir, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                    {
+                        photo.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
+
+            }
+        }
+
+        public long LoggedUser()
+        {
+            string logeduser = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            long.TryParse(logeduser.ToString(), out long uId);
+            return uId;
         }
     }
 }

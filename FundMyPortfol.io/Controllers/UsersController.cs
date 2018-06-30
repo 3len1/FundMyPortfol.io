@@ -9,10 +9,11 @@ using FundMyPortfol.io.Models;
 using FundMyPortfol.io.ViewModels;
 using FundMyPortfol.io.Converter;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace FundMyPortfol.io.Controllers
 {
-    [Authorize]
+    
     public class UsersController : Controller
     {
         private UsersConverter _usersConverter = new UsersConverter();
@@ -193,6 +194,13 @@ namespace FundMyPortfol.io.Controllers
                 ViewData["email"] = user.Email;
             }
             return View();
+        }
+
+        public long LoggedUser()
+        {
+            string logeduser = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            long.TryParse(logeduser.ToString(), out long uId);
+            return uId;
         }
     }
 }

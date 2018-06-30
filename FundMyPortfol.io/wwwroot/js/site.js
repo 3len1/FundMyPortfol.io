@@ -17,6 +17,7 @@ $("#ddProjectCategory").change(function () {
 $('#submit-data').on('click', function (event) {
  
     event.preventDefault();
+    //let formData = new FormData($('#form-data')[0]);
     let formData = $('#form-data').serialize();
     $(this).val('Please wait...')
         .attr('disabled', 'disabled');

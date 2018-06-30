@@ -37,7 +37,7 @@ namespace FundMyPortfol.io.Migrations
                     Street = table.Column<string>(maxLength: 100, nullable: true),
                     PostalCode = table.Column<string>(unicode: false, maxLength: 5, nullable: true),
                     PhoneNumber = table.Column<string>(unicode: false, maxLength: 10, nullable: true),
-                    ProfileImage = table.Column<byte[]>(type: "image", nullable: true)
+                    ProfileImage = table.Column<string>(type: "ntext", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -217,7 +217,7 @@ namespace FundMyPortfol.io.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CreatedDate = table.Column<DateTime>(type: "date", nullable: false, defaultValueSql: "(getdate())"),
                     Title = table.Column<string>(maxLength: 100, nullable: false),
-                    ProjectImage = table.Column<byte[]>(type: "image", nullable: true),
+                    ProjectImage = table.Column<string>(type: "ntext", nullable: true),
                     Likes = table.Column<int>(nullable: false),
                     PablishDate = table.Column<DateTime>(type: "date", nullable: false, defaultValueSql: "(getdate())"),
                     ExpireDate = table.Column<DateTime>(type: "date", nullable: false),

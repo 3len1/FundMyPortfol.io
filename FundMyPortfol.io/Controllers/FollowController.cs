@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FundMyPortfol.io.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace FundMyPortfol.io.Controllers
 {
@@ -101,12 +102,19 @@ namespace FundMyPortfol.io.Controllers
 
         private bool ConectionExist(long backer, long creator)
         {
-            return _context.BackerFollowCreator.Any(e => e.Backer == backer && e.ProjectCreator==creator);
+            return _context.BackerFollowCreator.Any(e => e.Backer == backer && e.ProjectCreator == creator);
         }
 
         private bool BackerFollowCreatorExists(long id)
         {
             return _context.BackerFollowCreator.Any(e => e.Id == id);
+        }
+
+        public long LoggedUser()
+        {
+            string logeduser = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            long.TryParse(logeduser.ToString(), out long uId);
+            return uId;
         }
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FundMyPortfol.io.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace FundMyPortfol.io.Controllers
 {
@@ -61,7 +62,7 @@ namespace FundMyPortfol.io.Controllers
             {
                 RedirectUrl = Url.Action("details", "packages", new { id = package.Id })
             });
-            
+
         }
 
         // GET: Packages/Edit/5
@@ -110,7 +111,7 @@ namespace FundMyPortfol.io.Controllers
         {
             if (id == null)
                 return BadRequest();
-           
+
             var package = await _context.Package
                 .Include(p => p.ProjectNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -134,6 +135,13 @@ namespace FundMyPortfol.io.Controllers
         private bool PackageExists(long id)
         {
             return _context.Package.Any(e => e.Id == id);
+        }
+
+        public long LoggedUser()
+        {
+            string logeduser = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            long.TryParse(logeduser.ToString(), out long uId);
+            return uId;
         }
     }
 }
