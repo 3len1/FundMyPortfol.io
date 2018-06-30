@@ -12,11 +12,7 @@ namespace FundMyPortfol.io.Models
             BackerFollowCreatorProjectCreatorNavigation = new HashSet<BackerFollowCreator>();
             Project = new HashSet<Project>();
         }
-        //public override long Id { get; set;}
-        //[HiddenInput(DisplayValue = false)]
-        //public DateTime CreatedDate { get; set; }
-        //public int ProjectCounter { get; set; }
-        //public int Followers { get; set; }
+        
         public long UserDetails { get; set; }
 
         public UserDetails UserDetailsNavigation { get; set; }

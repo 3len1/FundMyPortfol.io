@@ -8,11 +8,17 @@
 
 <h4> @Html.DisplayFor(model => model.LastName) @Html.DisplayFor(model => model.FirstName)</h4>
 
-
-<form asp-controller="Follow" asp-action="Follow">
-    <input type="hidden" asp-for="Id" />
-    <input type="submit" value="Follow" name="" class="btn btn-default" />
-</form>
+@if (User.Identity.IsAuthenticated)
+{
+    <form asp-controller="Follow" asp-action="Follow">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Follow" name="" class="btn btn-default" />
+    </form>
+}
+else
+{
+    <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Login">Log in First!</a>
+}
 <div>
     <hr />
     <dl class="dl-horizontal">
@@ -92,8 +98,18 @@
 
 
 </div>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+        <a asp-action="Delete" asp-route-id = "@Model.Id" > Delete </a >
+    </div>
+}
+else
+{
+    <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Login">Log in First!</a>
+}
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> |
     <a asp-action="Index">Back to List</a>
 </div>

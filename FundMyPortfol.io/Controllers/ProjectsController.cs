@@ -28,13 +28,14 @@ namespace FundMyPortfol.io.Controllers
         // GET: Projects
         public IActionResult Index(Project.Category category)
         {
-            var portofolioContext = _context.Project.Include(p => p.ProjectCtratorNavigation);
+            //var portofolioContext = _context.Project.Include(p => p.ProjectCtratorNavigation).Include(p=>p.ProjectCtratorNavigation.UserDetailsNavigation);
             var enumValues = Enum.GetValues(typeof(Project.Category));
             System.Linq.IQueryable result = null;
             if (category == 0)
-                result = _context.Project.Include(p => p.ProjectCtratorNavigation);
+                result = _context.Project.Include(p => p.ProjectCtratorNavigation).Include(p => p.ProjectCtratorNavigation.UserDetailsNavigation);
             else
-                result = _context.Project.Include(p => p.ProjectCtratorNavigation).Where(p => p.ProjectCategory == category);
+                result = _context.Project.Include(p => p.ProjectCtratorNavigation).
+                    Include(p => p.ProjectCtratorNavigation.UserDetailsNavigation).Where(p => p.ProjectCategory == category);
             ViewData["ddProjectCategory"] = category;
             return View(result);
         }
@@ -75,7 +76,7 @@ namespace FundMyPortfol.io.Controllers
             if (id == null)
                 return BadRequest();
             var project = await _context.Project
-                .Include(p => p.ProjectCtratorNavigation)
+                .Include(p => p.ProjectCtratorNavigation).Include(u => u.ProjectCtratorNavigation.UserDetailsNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (project == null)
                 return NotFound();
@@ -103,13 +104,14 @@ namespace FundMyPortfol.io.Controllers
         public async Task<IActionResult> Create([Bind("Id,ProjectCategory,Title,Likes,PablishDate,ExpireDate,MoneyGoal,MoneyReach,Description,ProjectCtrator")] Project project)
         {
             var httpFiles = HttpContext.Request.Form.Files;
-            AddMediaFiles(project, LoggedUser().ToString(), httpFiles);
+            //AddMediaFiles(project, LoggedUser().ToString(), httpFiles);
 
             if (!ModelState.IsValid)
                 return BadRequest();
 
             var user = await _context.User.FirstOrDefaultAsync(m => m.Id == LoggedUser());
-
+            project.ProjectCtrator = user.Id;
+            project.ProjectCtratorNavigation = user;
             _context.Add(project);
             await _context.SaveChangesAsync();
             return Json(new

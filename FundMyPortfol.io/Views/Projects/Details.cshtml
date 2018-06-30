@@ -38,7 +38,8 @@
         </dt>
         <dd>
             <a href="~/Users/Details/@Html.DisplayFor(model => model.ProjectCtratorNavigation.Id)">
-                @Html.DisplayFor(model => model.ProjectCtratorNavigation.Email)<br />
+                @Html.DisplayFor(model => model.ProjectCtratorNavigation.UserDetailsNavigation.FirstName)  
+                @Html.DisplayFor(model => model.ProjectCtratorNavigation.UserDetailsNavigation.LastName)<br />
             </a>
         </dd>
         <dt>

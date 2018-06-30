@@ -10,6 +10,7 @@ using FundMyPortfol.io.ViewModels;
 using FundMyPortfol.io.Converter;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using System.Collections;
 
 namespace FundMyPortfol.io.Controllers
 {
@@ -24,39 +25,21 @@ namespace FundMyPortfol.io.Controllers
             _context = context;
         }
 
-        //Get Users/Logout
-        [HttpGet]
-        public IActionResult Logout()
-        {
-            HttpContext.Response.Cookies.Delete("userId");
-            return RedirectToAction("Login");
-        }
-
-        //Get Users/Login
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-        //Post Users/Login
-        [HttpPost]
-        public async Task<IActionResult> Login(string email, string password)
-        {
-
-            var user = await _context.User.FirstOrDefaultAsync(u => u.Email == email);
-            if (user == null)
-            {
-                return View();
-            }
-            HttpContext.Response.Cookies.Append("userId", user.Id.ToString());
-            return RedirectToAction("Details", user);
-        }
-
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            var portofolioContext = _context.User.Include(u => u.UserDetailsNavigation);
-            return View(await portofolioContext.ToListAsync());
+            var portofolioContext = await _context.User.Include(u => u.UserDetailsNavigation).Include(p => p.Project).ToListAsync();
+            var users = new List<UserView>();
+            foreach(var user in portofolioContext){
+                UserView uv = new UserView();
+                uv.Id = user.Id;
+                uv.FirstName = user.UserDetailsNavigation.FirstName;
+                uv.LastName = user.UserDetailsNavigation.LastName;
+                uv.ProjectCounter = user.Project.Where(p => p.ProjectCtrator == user.Id).Count();
+                uv.Followers = _context.BackerFollowCreator.Where(b => b.ProjectCreator == user.Id).Count();
+                users.Add(uv);
+            }
+            return View(users);
         }
 
         // GET: Users/Details/5
@@ -72,6 +55,8 @@ namespace FundMyPortfol.io.Controllers
                 return NotFound();
 
             UserView userView = _usersConverter.UsertoUserViewConverter(user);
+            userView.ProjectCounter = _context.Project.Where(p => p.ProjectCtrator == id).Count();
+            userView.Followers = _context.BackerFollowCreator.Where(b => b.ProjectCreator == id).Count();
             var projects = _context.Project.Where(p => p.ProjectCtrator == id);
             userView.Project = projects.ToList();
 
@@ -106,10 +91,13 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // GET: Users/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
                 return BadRequest();
+            if (LoggedUser() != id)
+                return Forbid();
             var user = await _context.User
                 .Include(u => u.UserDetailsNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -122,10 +110,13 @@ namespace FundMyPortfol.io.Controllers
         // POST: Users/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(long id, [Bind("Id,Email,Password,ProjectCounter,Followers,LastName,FirstName,Country,Town,Street,PostalCode,PhoneNumber,ProfileImage")] UserView userView)
         {
             if (id != userView.Id)
                 return BadRequest();
+            if (LoggedUser() != id)
+                return Forbid();
             if (!ModelState.IsValid)
                 return BadRequest();
             var user = await _context.User.FirstOrDefaultAsync(m => m.Id == id);
@@ -133,7 +124,6 @@ namespace FundMyPortfol.io.Controllers
             user.Email = retriveUser.Email;
             UserDetails userDetails = _usersConverter.UserViewtoUserDetailsConverter(userView);
             userDetails.Id = user.UserDetails;
-            //userDetails.CreatedDate = user.CreatedDate;
             try
             {
                 _context.Update(userDetails);
@@ -154,10 +144,13 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // GET: Users/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
                 return NotFound();
+            if (LoggedUser() != id)
+                return Forbid();
             var user = await _context.User
                 .Include(u => u.UserDetailsNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -170,8 +163,11 @@ namespace FundMyPortfol.io.Controllers
         // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
+            if (LoggedUser() != id)
+                return Forbid();
             var user = await _context.User.FindAsync(id);
             var userDetails = await _context.UserDetails.FindAsync(user.UserDetails);
             _context.User.Remove(user);

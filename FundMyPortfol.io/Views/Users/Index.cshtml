@@ -1,4 +1,4 @@
-﻿@model IEnumerable<FundMyPortfol.io.Models.User>
+﻿@model IEnumerable<FundMyPortfol.io.ViewModels.UserView>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,10 +13,13 @@
     <thead>
         <tr>
             <th>
-                User
+                FullName
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                @Html.DisplayNameFor(model => model.ProjectCounter)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Followers)
             </th>
             <th></th>
         </tr>
@@ -25,16 +28,17 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.UserDetailsNavigation.FirstName)
-                @Html.DisplayFor(modelItem => item.UserDetailsNavigation.LastName)
+                @Html.DisplayFor(modelItem => item.FirstName)
+                @Html.DisplayFor(modelItem => item.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Email)
+                @Html.DisplayFor(modelItem => item.ProjectCounter)
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @Html.DisplayFor(modelItem => item.Followers)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
             </td>
         </tr>
 }
