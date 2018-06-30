@@ -42,7 +42,7 @@ namespace FundMyPortfol.io.Controllers
         public async Task<IActionResult> Login(string email, string password)
         {
 
-            var user = await _context.User.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+            var user = await _context.User.FirstOrDefaultAsync(u => u.Email == email);
             if (user == null)
             {
                 return View();
@@ -130,10 +130,9 @@ namespace FundMyPortfol.io.Controllers
             var user = await _context.User.FirstOrDefaultAsync(m => m.Id == id);
             var retriveUser = _usersConverter.UserViewtoUserConverter(userView);
             user.Email = retriveUser.Email;
-            user.Password = retriveUser.Password;
             UserDetails userDetails = _usersConverter.UserViewtoUserDetailsConverter(userView);
             userDetails.Id = user.UserDetails;
-            userDetails.CreatedDate = user.CreatedDate;
+            //userDetails.CreatedDate = user.CreatedDate;
             try
             {
                 _context.Update(userDetails);

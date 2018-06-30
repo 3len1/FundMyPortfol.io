@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 
 namespace FundMyPortfol.io.Models
 {
-    public partial class User
+    public partial class User:IdentityUser<long>
     {
         public User()
         {
@@ -13,15 +12,11 @@ namespace FundMyPortfol.io.Models
             BackerFollowCreatorProjectCreatorNavigation = new HashSet<BackerFollowCreator>();
             Project = new HashSet<Project>();
         }
-
-        public long Id { get; set; }
-        [HiddenInput(DisplayValue = false)]
-        public DateTime CreatedDate { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public Guid? SeasonId { get; set; }
-        public int ProjectCounter { get; set; }
-        public int Followers { get; set; }
+        //public override long Id { get; set;}
+        //[HiddenInput(DisplayValue = false)]
+        //public DateTime CreatedDate { get; set; }
+        //public int ProjectCounter { get; set; }
+        //public int Followers { get; set; }
         public long UserDetails { get; set; }
 
         public UserDetails UserDetailsNavigation { get; set; }

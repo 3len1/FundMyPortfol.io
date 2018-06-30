@@ -98,7 +98,6 @@ namespace FundMyPortfol.io.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
             var user = await _context.User.FirstOrDefaultAsync(m => m.Id == project.ProjectCtrator);
-            user.ProjectCounter++;
             _context.User.Update(user);
             _context.Add(project);
             await _context.SaveChangesAsync();
@@ -209,7 +208,6 @@ namespace FundMyPortfol.io.Controllers
         {
             var project = await _context.Project.FindAsync(id);
             var user = await _context.User.FindAsync(project.ProjectCtrator);
-            user.ProjectCounter--;
             _context.User.Update(user);
             _context.Project.Remove(project);
             await _context.SaveChangesAsync();

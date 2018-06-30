@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FundMyPortfol.io.Areas.Identity.Data;
 using FundMyPortfol.io.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,18 +34,20 @@ namespace FundMyPortfol.io
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            var connection = Configuration.GetConnectionString("FundMyPortfolioContextConnection");
+            //var connection = Configuration.GetConnectionString("FundMyPortfolioContextConnection");
 
-            services.AddDbContext<PortofolioContext>(
-               options => options.UseSqlServer(connection));
+            //services.AddDbContext<PortofolioContext>(
+            //   options => options.UseSqlServer(connection));
 
 
-            services.AddDbContext<FundMyPortfolioContext>(options =>
+            services.AddDbContext<PortofolioContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("FundMyPortfolioContextConnection")));
 
-            services.AddDefaultIdentity<FundMyPortfolioUser>()
-                .AddEntityFrameworkStores<FundMyPortfolioContext>();
+            services.AddIdentity<User, IdentityRole<long>>()
+                .AddDefaultUI()
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<PortofolioContext>();
 
             services.Configure<IdentityOptions>(options =>
             {

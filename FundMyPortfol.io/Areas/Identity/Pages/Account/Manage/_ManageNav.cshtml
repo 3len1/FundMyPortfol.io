@@ -1,4 +1,4 @@
-﻿@inject SignInManager<FundMyPortfolioUser> SignInManager
+﻿@inject SignInManager<FundMyPortfol.io.Models.User> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }

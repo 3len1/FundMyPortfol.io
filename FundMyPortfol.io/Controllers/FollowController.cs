@@ -87,7 +87,6 @@ namespace FundMyPortfol.io.Controllers
             BackerFollowCreator backerFollowCreator = new BackerFollowCreator();
             if (ConectionExist(backer.Id, creator.Id))
                 return BadRequest();
-            creator.Followers++;
             _context.User.Update(creator);
             backerFollowCreator.Backer = backer.Id;
             backerFollowCreator.ProjectCreator = creator.Id;
