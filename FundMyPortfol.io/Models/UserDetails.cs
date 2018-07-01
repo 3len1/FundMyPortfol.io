@@ -16,7 +16,7 @@ namespace FundMyPortfol.io.Models
         public string Street { get; set; }
         public string PostalCode { get; set; }
         public string PhoneNumber { get; set; }
-        public byte[] ProfileImage { get; set; }
+        public string ProfileImage { get; set; }
 
         public User User { get; set; }
     }

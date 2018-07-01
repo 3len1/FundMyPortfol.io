@@ -17,7 +17,8 @@ $("#ddProjectCategory").change(function () {
 $('#submit-data').on('click', function (event) {
  
     event.preventDefault();
-    let formData = $('#form-data').serialize();
+    let formData = new FormData($('#form-data')[0]);
+    //let formData = $('#form-data').serialize();
     $(this).val('Please wait...')
         .attr('disabled', 'disabled');
 
@@ -26,7 +27,9 @@ $('#submit-data').on('click', function (event) {
     $.ajax({
         url: action,
         type: 'post',
-        data: formData
+        data: formData,
+        processData: false,
+        contentType: false
     }).done(function (data) {
         $('#form-data').hide();
         $("#success-created").append('Project Created Successfully!');

@@ -14,16 +14,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Backer" class="control-label"></label>
-                <input asp-for="BackerNavigation.Email" class="form-control" />
-            </div>
-            <div class="form-group">
                 <label asp-for="Package" class="control-label"></label>
                 <input asp-for="PackageNavigation.PackageName" class="form-control" />
             </div>
             <div class="form-group">
                 <label asp-for="DeliveryDate" class="control-label"></label>
-                <input asp-for="DeliveryDate" class="form-control" />
+                <input asp-for="DeliveryDate" type="date" class="form-control" />
                 <span asp-validation-for="DeliveryDate" class="text-danger"></span>
             </div>
             <div class="form-group">

@@ -1,16 +1,18 @@
 ﻿@model FundMyPortfol.io.Models.Project
-
+@using System.Security.Claims;
 @{
     ViewData["Title"] = "Details";
 }
 
 <h2>@Html.DisplayFor(model => model.Title)</h2>
 
-
-<form asp-action="Like">
-    <input type="hidden" asp-for="Id" />
-    <input type="submit" value="Like" class="btn btn-default" />
-</form>
+@if (User.Identity.IsAuthenticated)
+{
+    <form asp-action="Like">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Like" class="btn btn-default" />
+    </form>
+}
 <div>
     <h4>Project info</h4>
     <hr />
@@ -38,7 +40,8 @@
         </dt>
         <dd>
             <a href="~/Users/Details/@Html.DisplayFor(model => model.ProjectCtratorNavigation.Id)">
-                @Html.DisplayFor(model => model.ProjectCtratorNavigation.Email)<br />
+                @Html.DisplayFor(model => model.ProjectCtratorNavigation.UserDetailsNavigation.FirstName)
+                @Html.DisplayFor(model => model.ProjectCtratorNavigation.UserDetailsNavigation.LastName)<br />
             </a>
         </dd>
         <dt>
@@ -80,14 +83,22 @@
         <ul class="list-group">
             @foreach (var package in ViewBag.data)
             {
-                <li class="list-group-item"><a href="~/Packages/Details/@package.Id"> @package.PackageName </a> <br />
-                Price: @package.PledgeAmount </li>
+                <li class="list-group-item">
+                    <a href="~/Packages/Details/@package.Id"> @package.PackageName </a> <br />
+                    Price: @package.PledgeAmount
+                </li>
             }
         </ul>
 
     </dl>
 </div>
+@if (User.Identity.IsAuthenticated && User.FindFirstValue(ClaimTypes.NameIdentifier).Equals(Model.ProjectCtrator.ToString()))
+{
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+        <a asp-action="Delete" asp-route-id="@Model.Id"> Delete </a>
+    </div>
+}
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

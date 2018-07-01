@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace FundMyPortfol.io.Models
 {
-    public partial class PortofolioContext : DbContext
+    public partial class PortofolioContext : IdentityDbContext<User, IdentityRole<long>, long>
     {
         public PortofolioContext()
         {
@@ -22,17 +22,11 @@ namespace FundMyPortfol.io.Models
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserDetails> UserDetails { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=Portofolio;Trusted_Connection=True;");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<BackerBuyPackage>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -118,7 +112,7 @@ namespace FundMyPortfol.io.Models
                     .HasColumnType("date")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.ProjectImage).HasColumnType("image");
+                entity.Property(e => e.ProjectImage).HasColumnType("ntext");
 
                 entity.Property(e => e.Title)
                     .IsRequired()
@@ -139,26 +133,10 @@ namespace FundMyPortfol.io.Models
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasIndex(e => e.Email)
-                    .HasName("UQ__User__A9D1053454263F07")
-                    .IsUnique();
-
                 entity.HasIndex(e => e.UserDetails)
                     .HasName("UQ__User__096601D9463255F4")
                     .IsUnique();
-
-                entity.Property(e => e.CreatedDate)
-                    .HasColumnType("date")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Email)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
+                
                 entity.HasOne(d => d.UserDetailsNavigation)
                     .WithOne(p => p.User)
                     .HasForeignKey<User>(d => d.UserDetails)
@@ -190,7 +168,7 @@ namespace FundMyPortfol.io.Models
                     .HasMaxLength(5)
                     .IsUnicode(false);
 
-                entity.Property(e => e.ProfileImage).HasColumnType("image");
+                entity.Property(e => e.ProfileImage).HasColumnType("ntext");
 
                 entity.Property(e => e.Street).HasMaxLength(100);
 
@@ -199,3 +177,14 @@ namespace FundMyPortfol.io.Models
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+

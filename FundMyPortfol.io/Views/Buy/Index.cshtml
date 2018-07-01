@@ -13,10 +13,10 @@
                 @Html.DisplayNameFor(model => model.Backer)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PackageNavigation.PackageName)
+                Package
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PackageNavigation.ProjectNavigation.Title)
+                Project
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DeliveryDate)
@@ -27,7 +27,8 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.BackerNavigation.Email)
+                @Html.DisplayFor(modelItem => item.BackerNavigation.UserDetailsNavigation.FirstName)
+                @Html.DisplayFor(modelItem => item.BackerNavigation.UserDetailsNavigation.LastName)
             </td>
             <td>
                 <a href="~/Packages/Details/@Html.DisplayFor(modelItem => item.Package)">

@@ -16,9 +16,8 @@ namespace FundMyPortfol.io.Converter
             {
                 Id = user.Id,
                 Email = user.Email,
-                Password = user.Password,
-                ProjectCounter = user.ProjectCounter,
-                Followers = user.Followers,
+                ProjectCounter = 0,
+                Followers = 0,
                 FirstName = user.UserDetailsNavigation?.FirstName,
                 LastName = user.UserDetailsNavigation?.LastName,
                 Country = user.UserDetailsNavigation?.Country,
@@ -37,8 +36,6 @@ namespace FundMyPortfol.io.Converter
             User userModel = new User
             {
                 Id = user.Id,
-                Email = user.Email,
-                Password = user.Password
             };
             return userModel;
         }
