@@ -75,10 +75,10 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ProjectImage)
+            Media
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ProjectImage)
+            <img class="img-responsive" width="304" height="236" src="@Html.DisplayFor(model => model.ProjectImage)" />
         </dd>
         <ul class="list-group">
             @foreach (var package in ViewBag.data)

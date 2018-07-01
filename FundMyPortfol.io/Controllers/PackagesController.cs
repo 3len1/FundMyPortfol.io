@@ -54,7 +54,7 @@ namespace FundMyPortfol.io.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Id,CreatedDate,PackageName,PledgeAmount,TimesSelected,PackageLeft,DeliveryDate,Description,Project")] Package package)
+        public async Task<IActionResult> Create([Bind("Id,CreatedDate,PackageName,PledgeAmount,PackageLeft,DeliveryDate,Description,Project")] Package package)
         {
             if (!ModelState.IsValid)
                 return BadRequest();

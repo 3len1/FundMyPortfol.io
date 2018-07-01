@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FundMyPortfol.io.Migrations
 {
     [DbContext(typeof(PortofolioContext))]
-    [Migration("20180630112240_Init")]
+    [Migration("20180701080617_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -68,7 +68,8 @@ namespace FundMyPortfol.io.Controllers
             if (user == null || package == null)
                 return RedirectToAction("Index");
             package.PackageLeft--;
-            if(package.PackageLeft < 0 || package.ProjectNavigation.ExpireDate < DateTime.Now)
+            package.TimesSelected++;
+            if (package.PackageLeft < 0 || package.ProjectNavigation.ExpireDate < DateTime.Now)
                 return RedirectToAction(nameof(Index));
             package.ProjectNavigation.MoneyReach = package.ProjectNavigation.MoneyReach + package.PledgeAmount;
             _context.Package.Update(package);

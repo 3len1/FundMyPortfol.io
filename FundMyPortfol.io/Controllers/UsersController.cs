@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FundMyPortfol.io.Models;
 using FundMyPortfol.io.ViewModels;
 using FundMyPortfol.io.Converter;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using System.Collections;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace FundMyPortfol.io.Controllers
 {
@@ -19,10 +20,12 @@ namespace FundMyPortfol.io.Controllers
     {
         private UsersConverter _usersConverter = new UsersConverter();
         private readonly PortofolioContext _context;
+        private readonly IHostingEnvironment _environment;
 
-        public UsersController(PortofolioContext context)
+        public UsersController(PortofolioContext context, IHostingEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
         // GET: Users
@@ -94,13 +97,14 @@ namespace FundMyPortfol.io.Controllers
                 return BadRequest();
             var user = await _context.User.FirstOrDefaultAsync(m => m.Id == id);
             var retriveUser = _usersConverter.UserViewtoUserConverter(userView);
-            user.Email = retriveUser.Email;
+            var httpFiles = HttpContext.Request.Form.Files;
+            var image = AddMediaFiles(LoggedUser().ToString(), httpFiles);
             UserDetails userDetails = _usersConverter.UserViewtoUserDetailsConverter(userView);
             userDetails.Id = user.UserDetails;
+            userDetails.ProfileImage = image;
             try
             {
                 _context.Update(userDetails);
-                _context.Update(user);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -153,6 +157,36 @@ namespace FundMyPortfol.io.Controllers
         {
             return _context.User.Any(e => e.Id == id);
         }
+
+        private string AddMediaFiles(string userId, IFormFileCollection httpFiles)
+        {
+            if (httpFiles.Count() > 0)
+            {
+                string pathToDir = string.Empty;
+                var photoName = "";
+                var mediaFile = httpFiles;
+
+                var folder = Path.Combine(_environment.WebRootPath, "media");
+                var createdDirectory = Directory.CreateDirectory(folder + "\\" + userId);
+                
+                foreach (var photo in mediaFile)
+                {
+                    if (photo.Length > 0)
+                    {
+                        photoName = httpFiles[0].GetFilename();
+                        pathToDir = createdDirectory + "\\" + photoName;
+                    }
+                    using (FileStream fs = new FileStream(pathToDir, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                    {
+                        photo.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
+                return "\\media\\" + userId + "\\" + photoName;
+
+            }
+            return null;
+        } 
 
         private long LoggedUser()
         {
