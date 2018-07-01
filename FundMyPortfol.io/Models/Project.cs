@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FundMyPortfol.io.Models
@@ -32,14 +33,24 @@ namespace FundMyPortfol.io.Models
         public long Id { get; set; }
         [HiddenInput(DisplayValue = false)]
         public DateTime CreatedDate { get; set; }
+    
+        [Required]
+        [StringLength(100)]
         public string Title { get; set; }
         public string ProjectImage { get; set; }
+       
         public int Likes { get; set; }
+       
         public DateTime PablishDate { get; set; }
+        [Required]
         public DateTime ExpireDate { get; set; }
+        [Required]
+        [Range(0, 999999.99)]
         public decimal MoneyGoal { get; set; }
+        
         public decimal MoneyReach { get; set; }
         public string Description { get; set; }
+       
         public long ProjectCtrator { get; set; }
         [NotMapped]
         public Category ProjectCategory { get; set; }
