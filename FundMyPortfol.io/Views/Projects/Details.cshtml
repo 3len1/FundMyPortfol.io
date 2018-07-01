@@ -55,6 +55,11 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.MoneyReach)
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:@ViewBag.prc%">
+                    @ViewBag.prc
+                </div>
+            </div>
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.PablishDate)

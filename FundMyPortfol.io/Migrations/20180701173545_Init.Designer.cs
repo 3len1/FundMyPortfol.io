@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FundMyPortfol.io.Migrations
 {
     [DbContext(typeof(PortofolioContext))]
-    [Migration("20180701080617_Init")]
+    [Migration("20180701173545_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,13 @@ namespace FundMyPortfol.io.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<long>("Package");
+
+                    b.Property<string>("PaymentToString")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("PaymentMethod")
+                        .HasDefaultValueSql("('PAYPAL')")
+                        .HasMaxLength(100);
 
                     b.HasKey("Id");
 
@@ -109,7 +116,7 @@ namespace FundMyPortfol.io.Migrations
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnName("Category")
-                        .HasDefaultValueSql("('innovation')")
+                        .HasDefaultValueSql("('INNOVATION')")
                         .HasMaxLength(100);
 
                     b.Property<DateTime>("CreatedDate")

@@ -225,7 +225,7 @@ namespace FundMyPortfol.io.Migrations
                     MoneyReach = table.Column<decimal>(type: "money", nullable: false, defaultValueSql: "((0.00))"),
                     Description = table.Column<string>(type: "ntext", nullable: true),
                     ProjectCtrator = table.Column<long>(nullable: false),
-                    Category = table.Column<string>(maxLength: 100, nullable: false, defaultValueSql: "('innovation')")
+                    Category = table.Column<string>(maxLength: 100, nullable: false, defaultValueSql: "('INNOVATION')")
                 },
                 constraints: table =>
                 {
@@ -271,7 +271,8 @@ namespace FundMyPortfol.io.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Backer = table.Column<long>(nullable: false),
                     Package = table.Column<long>(nullable: false),
-                    DeliveryDate = table.Column<DateTime>(type: "datetime", nullable: true)
+                    DeliveryDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    PaymentMethod = table.Column<string>(maxLength: 100, nullable: false, defaultValueSql: "('PAYPAL')")
                 },
                 constraints: table =>
                 {

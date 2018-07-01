@@ -21,6 +21,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.DeliveryDate)
             </th>
+            <th>
+                Payment method
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -32,14 +35,19 @@
             </td>
             <td>
                 <a href="~/Packages/Details/@Html.DisplayFor(modelItem => item.Package)">
-                    @Html.DisplayFor(modelItem => item.PackageNavigation.PackageName)</a>
+                    @Html.DisplayFor(modelItem => item.PackageNavigation.PackageName)
+                </a>
             </td>
             <td>
                 <a href="~/Projects/Details/@Html.DisplayFor(modelItem => item.PackageNavigation.Project)">
-                    @Html.DisplayFor(modelItem => item.PackageNavigation.ProjectNavigation.Title)</a>
+                    @Html.DisplayFor(modelItem => item.PackageNavigation.ProjectNavigation.Title)
+                </a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DeliveryDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentMethod)
             </td>
         </tr>
 }

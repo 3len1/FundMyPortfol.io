@@ -54,6 +54,9 @@ namespace FundMyPortfol.io.Controllers
             var backerBuyPackage = new BackerBuyPackage();
             backerBuyPackage.BackerNavigation = user;
             backerBuyPackage.PackageNavigation = package;
+            var payments = from BackerBuyPackage.Payment b in Enum.GetValues(typeof(BackerBuyPackage.Payment))
+                             select b.ToString();
+            ViewData["PaymentBag"] = new SelectList(payments);
             return View(backerBuyPackage);
         }
 
@@ -61,7 +64,7 @@ namespace FundMyPortfol.io.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Buy(long? Id, [Bind("Backer,Package,DeliveryDate")] BackerBuyPackage backerBuyPackage)
+        public async Task<IActionResult> Buy(long? Id, [Bind("Backer,Package,DeliveryDate,PaymentMethod")] BackerBuyPackage backerBuyPackage)
         { 
             var user = _context.User.FirstOrDefault(u => u.Id == LoggedUser());
             var package = _context.Package.Include(p => p.ProjectNavigation).FirstOrDefault(p => p.Id == Id);
@@ -79,6 +82,9 @@ namespace FundMyPortfol.io.Controllers
                 return BadRequest();
             _context.Add(backerBuyPackage);
             await _context.SaveChangesAsync();
+            var payments = from BackerBuyPackage.Payment b in Enum.GetValues(typeof(BackerBuyPackage.Payment))
+                             select b.ToString();
+            ViewData["PaymentBag"] = new SelectList(payments);
             return Json(new
             {
                 RedirectUrl = Url.Action("donates", "buy")

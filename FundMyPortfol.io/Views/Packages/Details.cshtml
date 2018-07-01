@@ -5,6 +5,7 @@
 }
 
 <h2>Funding package</h2>
+<h4>@Html.DisplayFor(model => model.PackageName)</h4>
 
 @if (User.Identity.IsAuthenticated && !User.FindFirstValue(ClaimTypes.NameIdentifier).Equals(Model.ProjectNavigation.ProjectCtrator.ToString()))
 {
