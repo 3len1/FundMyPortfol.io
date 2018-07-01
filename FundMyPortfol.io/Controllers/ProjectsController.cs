@@ -26,6 +26,7 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // GET: Projects
+        [AllowAnonymous]
         public IActionResult Index(Project.Category category)
         {
             var enumValues = Enum.GetValues(typeof(Project.Category));
@@ -42,6 +43,7 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // GET: Projects/Funded
+        [AllowAnonymous]
         public async Task<IActionResult> Funded()
         {
             var portofolioContext = _context.Project.Include(p => p.ProjectCtratorNavigation)
@@ -50,6 +52,7 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // GET: Projects/Available
+        [AllowAnonymous]
         public async Task<IActionResult> Available()
         {
             var portofolioContext = _context.Project.Include(p => p.ProjectCtratorNavigation)
@@ -68,8 +71,9 @@ namespace FundMyPortfol.io.Controllers
             return View(await portofolioContext.ToListAsync());
         }
 
-
+        
         // GET: Projects/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
@@ -179,12 +183,12 @@ namespace FundMyPortfol.io.Controllers
             var project = await _context.Project.FirstOrDefaultAsync(m => m.Id == id);
             project.Title = updateProject.Title;
             project.ProjectCategory = updateProject.ProjectCategory;
-            project.ProjectImage = updateProject.ProjectImage;
             project.PablishDate = updateProject.PablishDate;
             project.ExpireDate = updateProject.ExpireDate;
             project.MoneyGoal = updateProject.MoneyGoal;
             project.Description = updateProject.Description;
-            project.ProjectImage = image;
+            if(image!=null)
+                project.ProjectImage = image;
             try
             {
                 _context.Update(project);

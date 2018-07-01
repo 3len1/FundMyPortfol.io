@@ -22,6 +22,7 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // GET: Packages
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var portofolioContext = _context.Package.Include(p => p.ProjectNavigation).OrderBy(p => p.ProjectNavigation.Title);
@@ -29,6 +30,7 @@ namespace FundMyPortfol.io.Controllers
         }
 
         // GET: Packages/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
