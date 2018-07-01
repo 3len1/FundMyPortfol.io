@@ -35,6 +35,7 @@ namespace FundMyPortfol.io.Models
         public DateTime CreatedDate { get; set; }
     
         [Required]
+        [NotEmpty]
         [StringLength(100)]
         public string Title { get; set; }
         public string ProjectImage { get; set; }
@@ -42,10 +43,39 @@ namespace FundMyPortfol.io.Models
         public int Likes { get; set; }
        
         public DateTime PablishDate { get; set; }
+
         [Required]
+        [DatedValid]
         public DateTime ExpireDate { get; set; }
+
+        public class DatedValid : ValidationAttribute
+        {
+            protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+            {
+                value = (DateTime)value;
+                if (DateTime.Now.AddYears(2).CompareTo(value) >= 0 && DateTime.Now.CompareTo(value) <= 0)
+                    return ValidationResult.Success;
+                else
+                    return new ValidationResult("Date must be within the last two years");
+            }
+        }
+
+        public class NotEmpty : ValidationAttribute
+        {
+            protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+            {
+                if (string.IsNullOrEmpty((string)value) && string.IsNullOrWhiteSpace((string)value))
+                    return new ValidationResult("Required field must not be empty");
+                else
+                    return ValidationResult.Success;
+            }
+        }
+
+
+
+
         [Required]
-        [Range(0, 999999.99)]
+        [Range(0, 99999.99)]
         public decimal MoneyGoal { get; set; }
         
         public decimal MoneyReach { get; set; }
