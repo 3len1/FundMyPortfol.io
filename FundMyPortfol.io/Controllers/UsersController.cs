@@ -63,33 +63,6 @@ namespace FundMyPortfol.io.Controllers
             return View(userView);
         }
 
-        // GET: Users/Create
-        public IActionResult Create()
-        {
-            ViewData["UserDetails"] = new SelectList(_context.UserDetails, "Id", "FirstName");
-            return View();
-        }
-
-        // POST: Users/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Email,Password,ProjectCounter,Followers,LastName,FirstName,Country,Town,Street,PostalCode,PhoneNumber,ProfileImage")] UserView userView)
-        {
-            User user = _usersConverter.UserViewtoUserConverter(userView);
-            UserDetails userDetails = _usersConverter.UserViewtoUserDetailsConverter(userView);
-
-            if (!ModelState.IsValid)
-                return BadRequest();
-            user.UserDetailsNavigation = userDetails;
-            _context.Add(user);
-            await _context.SaveChangesAsync();
-            return Json(new
-            {
-                RedirectUrl = Url.Action("login", "users")
-            });
-
-        }
-
         // GET: Users/Edit/5
         [Authorize]
         public async Task<IActionResult> Edit(long? id)
