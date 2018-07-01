@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UnusedCode\**" />
+    <Content Remove="UnusedCode\**" />
+    <EmbeddedResource Remove="UnusedCode\**" />
+    <None Remove="UnusedCode\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.0" />
@@ -13,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
+    <Folder Include="wwwroot\media\" />
   </ItemGroup>
 
 </Project>

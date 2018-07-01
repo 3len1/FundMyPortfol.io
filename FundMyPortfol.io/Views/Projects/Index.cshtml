@@ -4,11 +4,13 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Projects</h2>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<h2>FundMyPortfol.io Projects</h2>
+@if (User.Identity.IsAuthenticated)
+{ 
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 <div class="container">
     <div class="row">
         <div class="col-sm-2 pull-right">
@@ -65,37 +67,38 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProjectCategory)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Likes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExpireDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MoneyGoal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MoneyReach)
-            </td>
-            <td>
-                <a href="~/Users/Details/@Html.DisplayFor(modelItem => item.ProjectCtratorNavigation.Id)">
-                    @Html.DisplayFor(modelItem => item.ProjectCtratorNavigation.UserDetailsNavigation.FirstName)
-                    @Html.DisplayFor(modelItem => item.ProjectCtratorNavigation.UserDetailsNavigation.LastName)
-                </a>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProjectCategory)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Likes)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExpireDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MoneyGoal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MoneyReach)
+                </td>
+                <td>
+                    <a href="~/Users/Details/@Html.DisplayFor(modelItem => item.ProjectCtratorNavigation.Id)">
+                        @Html.DisplayFor(modelItem => item.ProjectCtratorNavigation.UserDetailsNavigation.FirstName)
+                        @Html.DisplayFor(modelItem => item.ProjectCtratorNavigation.UserDetailsNavigation.LastName)
+                    </a>
 
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-            </td>
-        </tr>
-}
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
