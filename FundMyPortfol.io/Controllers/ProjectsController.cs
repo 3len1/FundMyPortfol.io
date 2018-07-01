@@ -19,9 +19,10 @@ namespace FundMyPortfol.io.Controllers
         private readonly PortofolioContext _context;
         private readonly IHostingEnvironment _environment;
 
-        public ProjectsController(PortofolioContext context)
+        public ProjectsController(PortofolioContext context, IHostingEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
         // GET: Projects
@@ -102,12 +103,13 @@ namespace FundMyPortfol.io.Controllers
         public async Task<IActionResult> Create([Bind("Id,ProjectCategory,Title,Likes,PablishDate,ExpireDate,MoneyGoal,MoneyReach,Description,ProjectCtrator")] Project project)
         {
             var httpFiles = HttpContext.Request.Form.Files;
-            //AddMediaFiles(project, LoggedUser().ToString(), httpFiles);
+            var image = AddMediaFiles(project, LoggedUser().ToString(), httpFiles);
 
             if (!ModelState.IsValid)
                 return BadRequest();
 
             var user = await _context.User.FirstOrDefaultAsync(m => m.Id == LoggedUser());
+            project.ProjectImage = image;
             project.ProjectCtrator = user.Id;
             project.ProjectCtratorNavigation = user;
             _context.Add(project);
@@ -236,7 +238,7 @@ namespace FundMyPortfol.io.Controllers
         }
 
 
-        private void AddMediaFiles(Project project, string userId, IFormFileCollection httpFiles)
+        private string AddMediaFiles(Project project, string userId, IFormFileCollection httpFiles)
         {
             if (httpFiles.Count() > 0)
             {
@@ -246,7 +248,7 @@ namespace FundMyPortfol.io.Controllers
 
                 var folder = Path.Combine(_environment.WebRootPath, "media");
                 var createdDirectory = Directory.CreateDirectory(folder + "\\" + userId + "\\" + $"{project.Title.ToLower()}");
-                project.ProjectImage = createdDirectory.ToString();
+                
                 foreach (var photo in mediaFile)
                 {
                     if (photo.Length > 0)
@@ -260,8 +262,10 @@ namespace FundMyPortfol.io.Controllers
                         fs.Flush();
                     }
                 }
+                return createdDirectory.FullName.ToString();
 
             }
+            return null;
         }
 
         private long LoggedUser()
