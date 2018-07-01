@@ -44,6 +44,11 @@ namespace FundMyPortfol.io.Models
                     .HasConstraintName("FK__BackerBuy__Packa__5070F446");
 
                 entity.Property(e => e.DeliveryDate).HasColumnType("datetime");
+
+                entity.Property(e => e.PaymentToString)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasDefaultValueSql("('PAYPAL')");
             });
 
             modelBuilder.Entity<BackerFollowCreator>(entity =>
@@ -121,7 +126,7 @@ namespace FundMyPortfol.io.Models
                 entity.Property(e => e.CategoryString)
                     .IsRequired()
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("('innovation')");
+                    .HasDefaultValueSql("('INNOVATION')");
 
                 entity.HasOne(d => d.ProjectCtratorNavigation)
                     .WithMany(p => p.Project)

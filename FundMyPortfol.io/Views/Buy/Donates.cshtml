@@ -20,30 +20,36 @@
             <th>
                 @Html.DisplayNameFor(model => model.DeliveryDate)
             </th>
+            <th>
+                Payment method
+            </th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BackerNavigation.UserDetailsNavigation.FirstName)
-                    @Html.DisplayFor(modelItem => item.BackerNavigation.UserDetailsNavigation.LastName)
-                </td>
-                <td>
-                    <a href="~/Packages/Details/@Html.DisplayFor(modelItem => item.Package)">
-                        @Html.DisplayFor(modelItem => item.PackageNavigation.PackageName)
-                    </a>
-                </td>
-                <td>
-                    <a href="~/Projects/Details/@Html.DisplayFor(modelItem => item.PackageNavigation.Project)">
-                        @Html.DisplayFor(modelItem => item.PackageNavigation.ProjectNavigation.Title)
-                    </a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DeliveryDate)
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.BackerNavigation.UserDetailsNavigation.FirstName)
+                @Html.DisplayFor(modelItem => item.BackerNavigation.UserDetailsNavigation.LastName)
+            </td>
+            <td>
+                <a href="~/Packages/Details/@Html.DisplayFor(modelItem => item.Package)">
+                    @Html.DisplayFor(modelItem => item.PackageNavigation.PackageName)
+                </a>
+            </td>
+            <td>
+                <a href="~/Projects/Details/@Html.DisplayFor(modelItem => item.PackageNavigation.Project)">
+                    @Html.DisplayFor(modelItem => item.PackageNavigation.ProjectNavigation.Title)
+                </a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeliveryDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentMethod)
+            </td>
+        </tr>
         }
     </tbody>
 </table>

@@ -32,6 +32,13 @@ namespace FundMyPortfol.io.Migrations
 
                     b.Property<long>("Package");
 
+                    b.Property<string>("PaymentToString")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("PaymentMethod")
+                        .HasDefaultValueSql("('PAYPAL')")
+                        .HasMaxLength(100);
+
                     b.HasKey("Id");
 
                     b.HasIndex("Backer");
@@ -107,7 +114,7 @@ namespace FundMyPortfol.io.Migrations
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnName("Category")
-                        .HasDefaultValueSql("('innovation')")
+                        .HasDefaultValueSql("('INNOVATION')")
                         .HasMaxLength(100);
 
                     b.Property<DateTime>("CreatedDate")
