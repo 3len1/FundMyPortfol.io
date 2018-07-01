@@ -157,7 +157,6 @@ namespace FundMyPortfol.io.Controllers
             var project = await _context.Project.FindAsync(id);
             if (project == null)
                 return NotFound();
-            ViewData["ProjectCtrator"] = new SelectList(_context.User, "Id", "Email", project.ProjectCtrator);
             var categories = from Project.Category c in Enum.GetValues(typeof(Project.Category))
                              select c.ToString();
             ViewData["CategoryBag"] = new SelectList(categories);
@@ -168,11 +167,13 @@ namespace FundMyPortfol.io.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,ProjectCategory,Title,ProjectImage,PablishDate,ExpireDate,MoneyGoal,Description")] Project updateProject)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,ProjectCategory,Title,PablishDate,ExpireDate,MoneyGoal,Description")] Project updateProject)
         {
             if (id != updateProject.Id)
                 return BadRequest();
 
+            var httpFiles = HttpContext.Request.Form.Files;
+            var image = AddMediaFiles(updateProject, LoggedUser().ToString(), httpFiles);
             if (!ModelState.IsValid)
                 return BadRequest();
             var project = await _context.Project.FirstOrDefaultAsync(m => m.Id == id);
@@ -183,6 +184,7 @@ namespace FundMyPortfol.io.Controllers
             project.ExpireDate = updateProject.ExpireDate;
             project.MoneyGoal = updateProject.MoneyGoal;
             project.Description = updateProject.Description;
+            project.ProjectImage = image;
             try
             {
                 _context.Update(project);
@@ -211,6 +213,7 @@ namespace FundMyPortfol.io.Controllers
 
             var project = await _context.Project
                 .Include(p => p.ProjectCtratorNavigation)
+                .Include(p => p.ProjectCtratorNavigation.UserDetailsNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (project == null)
                 return NotFound();
@@ -262,8 +265,7 @@ namespace FundMyPortfol.io.Controllers
                         fs.Flush();
                     }
                 }
-                return createdDirectory.FullName.ToString();
-
+                return "\\media\\"+ userId +"\\" + project.Title.ToLower()+"\\"+photoName;
             }
             return null;
         }

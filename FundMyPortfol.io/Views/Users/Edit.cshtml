@@ -11,19 +11,9 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form id="form-data" asp-action="Edit">
+        <form id="form-data" enctype="multipart/form-data" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
             <div class="form-group">
                 <label asp-for="LastName" class="control-label"></label>
                 <input asp-for="LastName" class="form-control" />
@@ -61,8 +51,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProfileImage" class="control-label"></label>
-                <input asp-for="ProfileImage" class="form-control" />
-                <span asp-validation-for="ProfileImage" class="text-danger"></span>
+                <input asp-for="ProfileImage" type="file" name="file" class="form-control" />
             </div>
             <div class="form-group">
                 <input id="submit-data" type="submit" value="Save" class="btn btn-default" />
