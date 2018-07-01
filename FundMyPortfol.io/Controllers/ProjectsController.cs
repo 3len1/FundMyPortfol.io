@@ -85,7 +85,7 @@ namespace FundMyPortfol.io.Controllers
                 return NotFound();
             var packages = _context.Package.Where(p => p.Project == id);
             ViewBag.data = packages.ToList();
-
+            ViewBag.prc =((project.MoneyReach / project.MoneyGoal) * 100).ToString("0.##");
             return View(project);
         }
 
