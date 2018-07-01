@@ -20,7 +20,9 @@
             <div class="form-group">
                 <label asp-for="DeliveryDate" class="control-label"></label>
                 <input asp-for="DeliveryDate" type="date" class="form-control" />
-                <span asp-validation-for="DeliveryDate" class="text-danger"></span>
+                <span asp-validation-for="DeliveryDate" class="text-danger">
+                    Date must in the next year
+                </span>
             </div>
             <div class="form-group">
                 <input id="submit-data" type="submit" value="Buy" class="btn btn-default" />

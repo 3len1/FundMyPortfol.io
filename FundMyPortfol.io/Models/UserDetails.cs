@@ -16,7 +16,7 @@ namespace FundMyPortfol.io.Models
         [Required]
         [StringLength(50)]
         public string FirstName { get; set; }
-        [StringLength(100)]
+        [StringLength(20)]
         public string Country { get; set; }
         [StringLength(20)]
         public string Town { get; set; }

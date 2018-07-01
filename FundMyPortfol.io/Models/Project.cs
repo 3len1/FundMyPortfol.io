@@ -48,6 +48,27 @@ namespace FundMyPortfol.io.Models
         [DatedValid]
         public DateTime ExpireDate { get; set; }
 
+        [Required]
+        [Range(0, 99999.99)]
+        public decimal MoneyGoal { get; set; }
+        
+        public decimal MoneyReach { get; set; }
+        public string Description { get; set; }
+       
+        public long ProjectCtrator { get; set; }
+        [NotMapped]
+        public Category ProjectCategory { get; set; }
+        [Column("Category")]
+        public string CategoryString
+        {
+            get { return ProjectCategory.ToString(); }
+
+            private set => ProjectCategory = value.ParseEnum<Category>();
+        }
+
+        public User ProjectCtratorNavigation { get; set; }
+        public ICollection<Package> Package { get; set; }
+
         public class DatedValid : ValidationAttribute
         {
             protected override ValidationResult IsValid(object value, ValidationContext validationContext)
@@ -70,29 +91,5 @@ namespace FundMyPortfol.io.Models
                     return ValidationResult.Success;
             }
         }
-
-
-
-
-        [Required]
-        [Range(0, 99999.99)]
-        public decimal MoneyGoal { get; set; }
-        
-        public decimal MoneyReach { get; set; }
-        public string Description { get; set; }
-       
-        public long ProjectCtrator { get; set; }
-        [NotMapped]
-        public Category ProjectCategory { get; set; }
-        [Column("Category")]
-        public string CategoryString
-        {
-            get { return ProjectCategory.ToString(); }
-
-            private set => ProjectCategory = value.ParseEnum<Category>();
-        }
-
-        public User ProjectCtratorNavigation { get; set; }
-        public ICollection<Package> Package { get; set; }
     }
 }

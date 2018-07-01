@@ -15,26 +15,34 @@
             <div class="form-group">
                 <label asp-for="PackageName" class="control-label"></label>
                 <input asp-for="PackageName" class="form-control" />
-                <span asp-validation-for="PackageName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TimesSelected" class="control-label"></label>
-                <input asp-for="TimesSelected" class="form-control" />
-                <span asp-validation-for="TimesSelected" class="text-danger"></span>
+                <span asp-validation-for="PackageName" class="text-danger">
+                    Required field must not be empty
+                </span>
             </div>
             <div class="form-group">
                 <label asp-for="PackageLeft" class="control-label"></label>
                 <input asp-for="PackageLeft" class="form-control" />
-                <span asp-validation-for="PackageLeft" class="text-danger"></span>
+                <span asp-validation-for="PackageLeft" class="text-danger">
+                    Required field must not be empty
+                </span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PledgeAmount" class="control-label"></label>
+                <input asp-for="PledgeAmount" class="form-control" />
+                <span asp-validation-for="PledgeAmount" class="text-danger">
+                    Required field must not be empty
+                </span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <span asp-validation-for="Description" class="text-danger">
+                    Required field must not be empty
+                </span>
             </div>
             <div class="form-group">
                 <label asp-for="Project" class="control-label"></label>
-                <select asp-for="Project" class ="form-control" asp-items="ViewBag.Project"></select>
+                <select asp-for="Project" class="form-control" asp-items="ViewBag.Project"></select>
             </div>
             <div class="form-group">
                 <input id="submit-data" type="submit" value="Create" class="btn btn-default" />
